@@ -16,6 +16,28 @@
    (lambda (key)
      (setf db (delete key db :key #'car)) key)))
 
+;; p. 21
+#+nil
+(setq fact
+      (lambda (f n)
+        (if (= n 0)
+            1
+            (* n (funcall f f (- n 1))))))
+
+#+nil
+(defun recurser (fn)
+  (lambda (&rest args)
+    (apply fn fn args)))
+
+;; p. 24
+#+nil
+(defun compall ()
+  (do-symbols (s)
+    (when (fboundp s)
+      (unless (compiled-function-p (symbol-function s))
+        (print s)
+        (compile s)))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Chapter 3 - Functional Programming
 
@@ -35,6 +57,22 @@
                  acc
                  (rev (cdr lst) (cons (car lst) acc)))))
     (rev lst nil)))
+
+;; p. 31
+#+nil
+(defun our-nreverse (lst)
+  (if (null (cdr lst))
+      lst
+      (prog1 (nr2 lst)
+        (setf (cdr lst) nil))))
+
+#+nil
+(defun nr2 (lst)
+  (let ((c (cdr lst)))
+    (prog1 (if (null (cdr c))
+               c
+               (nr2 c))
+      (setf (cdr c) lst))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Chapter 4 - Utility Functions
@@ -74,6 +112,17 @@
         (if val (push val acc))))
     (nreverse acc)))
 
+#+nil
+(defun filter (fn lst)
+  (delete nil (mapcar fn lst)))
+
+#+nil
+(defun filter (fn lst)
+  (mapcar (lambda (x)
+            (let ((val (funcall fn x)))
+              (if val (list val))))
+          lst))
+
 (defun group (source n)
   (if (zerop n) (error "zero length"))
   (labels ((rec (source acc)
@@ -83,6 +132,14 @@
                    (nreverse (cons source acc))))))
     (if source (rec source nil) nil)))
 
+#+nil
+(defun group (source n)
+  (if (endp source)
+      nil
+      (let ((rest (nthcdr n source)))
+        (cons (if (consp rest) (subseq source 0 n) source)
+              (group rest n)))))
+
 ;; p. 49
 (defun flatten (x)
   (labels ((rec (x acc)
@@ -90,6 +147,12 @@
                    ((atom x) (cons x acc))
                    (t (rec (car x) (rec (cdr x) acc))))))
     (rec x nil)))
+
+#+nil
+(defun flatten (x)
+  (mapcan (lambda (x)
+            (if (atom x) (mklist x) (flatten x)))
+          x))
 
 (defun prune (test tree)
   (labels ((rec (tree acc)
@@ -102,6 +165,17 @@
                                acc
                                (cons (car tree) acc)))))))
     (rec tree nil)))
+
+#+nil
+(defun prune (test tree)
+  (if (atom tree)
+      tree
+      (mapcar (lambda (x)
+                (prune test x))
+              (remove-if (lambda (y)
+                           (and (atom y)
+                                (funcall test y)))
+                         tree))))
 
 ;; p. 50
 (defun find2 (fn lst)
@@ -308,6 +382,16 @@
                           (lambda ()
                             (self (cdr lst)))))))
     #'self))
+
+;; p. 73
+#+nil
+(defun rfind-if (fn tree)
+  (if (funcall fn tree)
+      tree
+      (if (atom tree)
+          nil
+          (or (rfind-if fn (car tree))
+              (and (cdr tree) (rfind-if fn (cdr tree)))))))
 
 ;; p. 74
 (defun ttrav (rec &optional (base #'identity))
@@ -1404,6 +1488,16 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Chapter 16 - Macro-Defining Macros
+
+;; p. 213
+#+nil
+(let ((syms nil))
+  (do-symbols (s)
+    (push s syms))
+  (sort syms
+        (lambda (x y)
+          (> (length (symbol-name x))
+             (length (symbol-name y))))))
 
 ;; p. 214
 (defmacro abbrev (short long)

@@ -85,6 +85,15 @@
                        *paths*))
            (car choices)))))
 
+;;(define (choose choices)
+;;  (if (null? choices)
+;;      (fail)
+;;      (call-with-current-continuation
+;;       (lambda (cc)
+;;         (push *paths*
+;;               (lambda () (cc (choose (cdr choices)))))
+;;         (car choices)))))
+
 (define fail)
 
 (call-with-current-continuation
@@ -96,6 +105,13 @@
                (let ((p1 (car *paths*)))
                  (set! *paths* (cdr *paths*))
                  (p1)))))))
+
+;;(call-with-current-continuation
+;; (lambda (cc)
+;;   (define (fail)
+;;     (if (null? *paths*)
+;;         (cc failsym)
+;;         ((pop *paths*))))))
 
 ;; p. 300
 
@@ -180,6 +196,23 @@
                                   (lambda () (cc choice)))
                                 choices)))
      (fail))))
+
+;;(define-syntax (true-choose choices)
+;;  `(choose-fn ,choices ',(generate-symbol t)))
+
+;;(define (choose-fn choices tag)
+;;  (if (null? choices)
+;;      (fail)
+;;      (call-with-current-continuation
+;;       (lambda (cc)
+;;         (push *paths*
+;;               (lambda () (cc (choose-fn (cdr choices)
+;;                                         tag))))
+;;         (if (mem equal? (car choices)
+;;                  (table-entry *choice-pts* tag))
+;;             (fail)
+;;             (car (push (table-entry *choice-pts* tag)
+;;                        (car choices))))))))
 
 (define fail)
 
