@@ -2,6 +2,17 @@
 
 (defsuite* test-all)
 
+(defun run-all-tests ()
+  (test-all)
+  (format t " |~%") ;; needed to avoid screwing up colors in SLIME REPL
+  (run-tests :all :on-lisp-test))
+
+(define-test test-blah
+  ;; need to have at least one lisp-unit test to not barf in REPL
+  (assert-expands
+   (blarf)
+   (blarf)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Chapter 19 - A Query Compiler
 
@@ -25,7 +36,7 @@
 (deftest born-1697% ()
   (let ((answers))
     (with-answer% (and (painter ?x _ _)
-                      (dates ?x 1697 _))
+                       (dates ?x 1697 _))
       (push (list ?x) answers))
     (is (= (length answers) 2))
     (is (member '(canale) answers :test #'equal))
@@ -34,7 +45,7 @@
 (deftest died-1772-or-1792% ()
   (let ((answers))
     (with-answer% (or (dates ?x ?y 1772)
-                     (dates ?x ?y 1792))
+                      (dates ?x ?y 1792))
       (push (list ?x ?y) answers))
     (is (= (length answers) 2))
     (is (member '(hogarth 1697) answers :test #'equal))
@@ -45,9 +56,9 @@
 (deftest not-shared-birth-year% ()
   (let ((answers))
     (with-answer% (and (painter ?x _ english)
-                      (dates ?x ?b _)
-                      (not (and (painter ?x2 _ venetian)
-                                (dates ?x2 ?b _))))
+                       (dates ?x ?b _)
+                       (not (and (painter ?x2 _ venetian)
+                                 (dates ?x2 ?b _))))
       (push (list ?x) answers))
     (is (equal answers '((reynolds))))))
 
@@ -199,7 +210,7 @@
              '(a c f g))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;; Chapten 23 - An ATN Compiler
+;;;; Chapter 23 - An ATN Compiler
 (def-atn-node s
     (down np s/subj
           (setr mood 'decl))

@@ -524,6 +524,21 @@
 (defmacro mac (expr)
   `(pprint (macroexpand-1 ',expr)))
 
+;; p. 94
+#+nil
+(defmacro our-dolist ((var list &optional result) &body body)
+  `(progn
+     (mapc (lambda (,var) ,@body)
+           ,list)
+     (let ((,var nil))
+       ,result)))
+
+#+nil
+(defmacro when-bind ((var expr) &body body)
+  `(let ((,var ,expr))
+     (when ,var
+       ,@body)))
+
 ;; p. 95
 (defmacro our-expander (name) `(get ,name 'expander))
 
@@ -1944,7 +1959,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Chapter 20 - Continuations
 
-
 ;; p. 267
 
 ;; http://www.paulgraham.com/onlisperrata.html:
@@ -1955,8 +1969,8 @@
 ;; *cont* will nearly always be a parameter, captured by =values and the
 ;; macros defined by =defun. Within the body of add1, for example, *cont*
 ;; is a parameter and not the global variable. This distinction is important
-;; because these macros wouldn’t work if *cont* were not a local variable.
-;; That’s why *cont* is given its initial value in a setq instead of a defvar:
+;; because these macros wouldn't work if *cont* were not a local variable.
+;; That's why *cont* is given its initial value in a setq instead of a defvar:
 ;; the latter would also proclaim it to be special.
 
 ;;(setq *cont* #'identity)
