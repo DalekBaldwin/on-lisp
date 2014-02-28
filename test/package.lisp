@@ -79,7 +79,8 @@
       (:dispatch-macro-char #\# #\`
                             ;; copy-list or copy-tree. for when it's natural
                             ;; to express a list as a quoted form but you
-                            ;; can't risk someone else mutating it
+                            ;; can't risk someone else mutating it (which pg
+                            ;; does in the book several times)
                             (lambda (stream subchar arg)
                               (declare (ignore subchar arg))
                               `(copy-tree (quote ,(read stream t nil t))))))))

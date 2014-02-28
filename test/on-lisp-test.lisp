@@ -344,6 +344,7 @@
 (defmacro destruc-macro (pat seq)
   (destruc pat seq))
 
+#+sbcl
 (define-test test-destruc-expand
   (assert-expands
    ((A (ELT SEQ 0))
@@ -356,6 +357,7 @@
 (defmacro dbind-ex-macro (binds body)
   (dbind-ex binds body))
 
+#+sbcl
 (define-test test-dbind-ex-expand
   (assert-expands
    (LET ((A (ELT SEQ 0))
@@ -412,12 +414,68 @@
          lst)
        #`(uno (2 tre) 4))))
 
+;; p. 238
 
+(deftest test-match ()
+  (is (equal (multiple-value-bind (binds matched)
+                 (match #`(p a b c a) #`(p ?x ?y c ?x))
+               (list binds matched))
+             #`(((?y . b) (?x . a))
+                t)))
+  ;; p. 239
+  (is (equal (multiple-value-bind (binds matched)
+                 (match #`(p ?x b ?y a) #`(p ?y b c a))
+               (list binds matched))
+             #`(((?y . c) (?x . ?y))
+                t)))
+  (is (equal (multiple-value-bind (binds matched)
+                 (match #`(a b c) #`(a a a))
+               (list binds matched))
+             #`(nil nil)))
+  (is (equal (multiple-value-bind (binds matched)
+                 (match #`(p ?x) #`(p ?x))
+               (list binds matched))
+             #`(nil t)))
+  ;; p. 240
+  (is (equal (multiple-value-bind (binds matched)
+                 (match #`(a ?x b) #`(_ 1 _))
+               (list binds matched))
+             #`(((?x . 1))
+                t))))
+
+;; p. 241
+(deftest test-if-match ()
+  (flet ((abab (seq)
+           (if-match (?x ?y ?x ?y) seq
+                     (values ?x ?y)
+                     nil)))
+    (is (equal (multiple-value-bind (x y)
+                   (abab #`(hi ho hi ho))
+                 (list x y))
+               #`(hi ho)))
+    ;; p. 244
+    (is (=
+         (let ((n 3))
+           (if-match (?x n 'n '(a b)) '(1 3 n (a b))
+                     ?x))
+         1))
+    ;; p. 245
+    (is (equal (multiple-value-bind (a b)
+                   (abab "abab")
+                 (list a b))
+               (list #\a #\b)))
+    (is (equal (multiple-value-bind (a b)
+                   (abab #(1 2 1 2))
+                 (list a b))
+               #`(1 2)))
+    (is (equalp (multiple-value-bind (x y)
+                    (if-match (?x (1 . ?y) . ?x) #`((a b) #(1 2 3) a b)
+                              (values ?x ?y))
+                  (list x y))
+                #`((a b) #(2 3))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Chapter 19 - A Query Compiler
-
-
 
 ;; p. 252
 (clear-db)
@@ -429,14 +487,13 @@
 (fact dates reynolds 1723 1792)
 
 ;; p. 253
-#+nil
 (deftest hogarth% ()
   (let ((answers))
     (with-answer% (painter hogarth ?x ?y)
       (push (list ?x ?y) answers))
     (is (= (length answers) 1))
     (is (member #`(william english) answers :test #'equal))))
-#+nil
+
 (deftest born-1697% ()
   (let ((answers))
     (with-answer% (and (painter ?x _ _)
@@ -445,7 +502,7 @@
     (is (= (length answers) 2))
     (is (member #`(canale) answers :test #'equal))
     (is (member #`(hogarth) answers :test #'equal))))
-#+nil
+
 (deftest died-1772-or-1792% ()
   (let ((answers))
     (with-answer% (or (dates ?x ?y 1772)
@@ -454,7 +511,7 @@
     (is (= (length answers) 2))
     (is (member #`(hogarth 1697) answers :test #'equal))
     (is (member #`(reynolds 1723) answers :test #'equal))))
-#+nil
+
 (deftest not-shared-birth-year% ()
   (let ((answers))
     (with-answer% (and (painter ?x _ english)
@@ -464,16 +521,14 @@
       (push (list ?x) answers))
     (is (equal answers #`((reynolds))))))
 
-
 ;; p. 257
-#+nil
 (deftest hogarth ()
   (let ((answers))
     (with-answer (painter 'hogarth ?x ?y)
       (push (list ?x ?y) answers))
     (is (= (length answers) 1))
     (is (member #`(william english) answers :test #'equal))))
-#+nil
+
 (deftest not-shared-birth-year ()
   (let ((answers))
     (with-answer (and (painter ?x _ 'english)
@@ -482,7 +537,7 @@
                                 (dates ?x2 ?b _))))
       (push (list ?x) answers)
       (is (equal answers #`((reynolds)))))))
-#+nil
+
 (deftest died-1770-to-1800 ()
   (let ((answers))
     (with-answer (and (painter ?x _ _)

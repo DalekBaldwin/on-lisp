@@ -439,6 +439,7 @@
   (:use :cl)
   (:export
    #:aif
+   #:it
    #:awhen
    #:awhile
    #:aand
@@ -491,13 +492,15 @@
   (:use :cl)
   (:import-from :on-lisp.04
                 :group)
+  (:import-from :on-lisp.14
+                :it)
   (:export
    #:abbrev
    #:abbrevs
    #:propmacro
    #:propmacros
    #:a+
-   #:it
+   ;;#:it
    #:a+expand
    #:alist
    #:alist-expand
@@ -521,8 +524,13 @@
   (:use :cl)
   (:import-from :on-lisp.04
                 :symb)
+  (:import-from :on-lisp.11
+                :with-gensyms)
   (:import-from :on-lisp.14
-                :acond2)
+                :aif
+                :it
+                :acond2
+                :aif2)
   (:export
    #:dbind
    #:destruc
@@ -533,6 +541,7 @@
    #:with-places
    #:wplac-ex
    #:match
+   ;;#:it
    #:varsym?
    #:binding
    #:if-match
@@ -551,7 +560,12 @@
   (:use :cl)
   (:import-from :on-lisp.11
                 :with-gensyms)
+  (:import-from :on-lisp.14
+                :it
+                :aif2)
   (:import-from :on-lisp.18
+                :match
+                :binding
                 :vars-in
                 :pat-match
                 :simple?

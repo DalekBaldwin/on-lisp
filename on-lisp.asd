@@ -26,10 +26,16 @@
              (:file "chapter-13" :depends-on ("package" "chapter-11"))
              (:file "chapter-14" :depends-on ("package"))
              (:file "chapter-15" :depends-on ("package"))
-             (:file "chapter-16" :depends-on ("package"))
+             (:file "chapter-16" :depends-on ("package" "chapter-14"))
              (:file "chapter-17" :depends-on ("package"))
-             (:file "chapter-18" :depends-on ("package" "chapter-04" "chapter-14"))
-             (:file "chapter-19" :depends-on ("package" "chapter-11" "chapter-18"))
+             (:file "chapter-18" :depends-on ("package"
+                                              "chapter-04"
+                                              "chapter-11"
+                                              "chapter-14"))
+             (:file "chapter-19" :depends-on ("package"
+                                              "chapter-11"
+                                              "chapter-14"
+                                              "chapter-18"))
              (:file "chapter-20" :depends-on ("package"))
              (:file "chapter-21" :depends-on ("package" "chapter-20"))
              (:file "chapter-22" :depends-on ("package"))
