@@ -14,6 +14,8 @@
      (setf db (delete key db :key #'car)) key)))
 
 ;; p. 21
+
+;; from the notes
 #+nil
 (setq fact
       (lambda (f n)
@@ -21,12 +23,15 @@
             1
             (* n (funcall f f (- n 1))))))
 
+;; from the notes
 #+nil
 (defun recurser (fn)
   (lambda (&rest args)
     (apply fn fn args)))
 
 ;; p. 24
+
+;; from the notes
 #+nil
 (defun compall ()
   (do-symbols (s)

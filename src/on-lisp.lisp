@@ -1480,7 +1480,7 @@
 
 ;; changed as per:
 ;; http://coding.derkeiler.com/Archive/Lisp/comp.lang.lisp/2009-06/msg00968.html
-(eval-when (:compile-toplevel :execute)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (define-symbol-macro unforced (load-time-value *unforced*)))
 (defvar *unforced* (list :unforced))
 

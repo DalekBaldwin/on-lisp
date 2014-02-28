@@ -33,10 +33,17 @@
        (car ,lst)
        (nthb (- ,n 1) (cdr ,lst))))
 
+#+nil
+(defmacro nthc (n lst)
+  `(do ((n2 ,n (1- n2))
+        (lst2 ,lst (cdr lst2)))
+       ((= n2 0) (car lst2))))
+
 ;; p. 141
 (defmacro nthd (n lst)
   `(nth-fn ,n ,lst))
 
+;; same as ntha
 (defun nth-fn (n lst)
   (if (= n 0)
       (car lst)

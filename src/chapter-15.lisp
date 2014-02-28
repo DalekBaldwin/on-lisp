@@ -31,6 +31,8 @@
                 (rec fns)))))
 
 ;; p. 205
+
+;; remember, lrec does not yield tail-recursive solutions
 (defmacro alrec (rec &optional base)
   "cltl2 version"
   (let ((gfn (gensym)))
@@ -48,6 +50,7 @@
                ,rec))
            ,base)))
 
+;; why do these functions take multiple lists when lrec and trec don't?
 (defmacro on-cdrs (rec base &rest lsts)
   `(funcall (alrec ,rec (lambda () ,base)) ,@lsts))
 
@@ -81,6 +84,11 @@
                (values (max mx it) (min mn it)))
              (values (car args) (car args))
              (cdr args))))
+
+;; note how compile-cmds (p. 310) could be implemented with on-cdrs
+#+nil
+(defun compile-cmds (cmds)
+  (on-cdrs `(,@it ,rec) 'regs cmds))
 
 ;; p. 210
 (defmacro atrec (rec &optional (base 'it))
@@ -127,7 +135,7 @@
 
 ;; changed as per:
 ;; http://coding.derkeiler.com/Archive/Lisp/comp.lang.lisp/2009-06/msg00968.html
-(eval-when (:compile-toplevel :execute)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (define-symbol-macro unforced (load-time-value *unforced*)))
 (defvar *unforced* (list :unforced))
 

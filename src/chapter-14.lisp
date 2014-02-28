@@ -38,6 +38,18 @@
                (acond ,@(cdr clauses)))))))
 
 ;; p. 193
+
+;; wrong
+#+nil
+(defmacro acond (&rest clauses)
+  (if (null clauses)
+      nil
+      (let ((cl1 (car clauses)))
+        `(let ((it ,(car cl1)))
+           (if it
+               (progn ,@(cdr cl1))
+               (acond ,@(cdr clauses)))))))
+
 (defmacro alambda (parms &body body)
   `(labels ((self ,parms ,@body))
      #'self))

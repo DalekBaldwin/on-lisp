@@ -21,6 +21,8 @@
     (rev lst nil)))
 
 ;; p. 31
+
+;; from the notes
 #+nil
 (defun our-nreverse (lst)
   (if (null (cdr lst))
@@ -28,6 +30,7 @@
       (prog1 (nr2 lst)
         (setf (cdr lst) nil))))
 
+;; from the notes
 #+nil
 (defun nr2 (lst)
   (let ((c (cdr lst)))

@@ -360,6 +360,12 @@
 
 (defpackage :on-lisp.11
   (:use :cl)
+  (:import-from :on-lisp.04
+                :mklist
+                :map0-n
+                :map1-n
+                :mappend
+                :group)
   (:export
    #:our-let
    #:when-bind
@@ -391,6 +397,8 @@
 
 (defpackage :on-lisp.12
   (:use :cl)
+  (:import-from :on-lisp.11
+                :with-gensyms)
   (:export
    #:allf
    #:nilf
@@ -411,6 +419,11 @@
 
 (defpackage :on-lisp.13
   (:use :cl)
+  (:import-from :on-lisp.04
+                :map0-n
+                :map1-n)
+  (:import-from :on-lisp.11
+                :with-gensyms)
   (:export
    #:most-of
    #:nthmost
@@ -442,6 +455,9 @@
 
 (defpackage :on-lisp.15
   (:use :cl)
+  (:import-from :on-lisp.05
+                :lrec
+                :trec)
   (:export
    #:fn
    #:rbuild
@@ -479,6 +495,7 @@
    #:propmacro
    #:propmacros
    #:a+
+   #:it
    #:a+expand
    #:alist
    #:alist-expand
@@ -525,7 +542,7 @@
    #:length-test
    ))
 
-(defpackage #:on-lisp.19
+(defpackage :on-lisp.19
   (:use :cl)
   (:import-from :on-lisp.11
                 :with-gensyms)
@@ -576,6 +593,8 @@
 
 (defpackage :on-lisp.21
   (:use :cl)
+  (:import-from :on-lisp.20
+                :=defun)
   (:export
    ;;#:proc
    ;;#:pri
@@ -607,6 +626,9 @@
 
 (defpackage :on-lisp.23
   (:use :cl)
+  (:import-from :on-lisp.20
+                :=defun
+                :=bind)
   (:export
    #:def-atn-node
    #:down

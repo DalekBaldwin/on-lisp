@@ -1,9 +1,9 @@
 (defpackage #:on-lisp-test
   #+nil
+  (:use :cl :on-lisp
+        :stefil :lisp-unit :named-readtables)
   (:use :cl :stefil :lisp-unit
-        :on-lisp
-        )
-  (:use :cl :stefil :lisp-unit
+        :named-readtables
         :on-lisp.02
         :on-lisp.03
         :on-lisp.04
@@ -32,3 +32,35 @@
   (:export
    #:test-all))
 
+(in-package :on-lisp-test)
+
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (unless (find-readtable :on-lisp-test)
+    (defreadtable :on-lisp-test
+      (:merge :standard)
+      (:dispatch-macro-char #\# #\@
+                            ;; #@classname --> (find-class 'classname)
+                            (lambda (stream subchar arg)
+                              (declare (ignore subchar arg))
+                              `(find-class (quote ,(read stream t nil t)))))
+      (:dispatch-macro-char #\# #\/
+                            ;; #/(class-name :slot value) -->
+                            ;; (make-instance 'class-name :slot value)
+                            (lambda (stream subchar arg)
+                              (declare (ignore subchar arg))
+                              (let ((stuff (read stream t nil t)))
+                                `(make-instance ',(car stuff) ,@(cdr stuff)))))
+      (:dispatch-macro-char #\# #\!
+                            ;; ignore entire expression, good for commenting out
+                            ;; multi-line s-expression
+                            (lambda (stream subchar arg)
+                              (declare (ignore subchar arg))
+                              (read stream t nil t)
+                              (values)))
+      (:dispatch-macro-char #\# #\`
+                            ;; copy-list or copy-tree. for when it's natural
+                            ;; to express a list as a quoted form but you
+                            ;; can't risk someone else mutating it
+                            (lambda (stream subchar arg)
+                              (declare (ignore subchar arg))
+                              `(copy-tree (quote ,(read stream t nil t))))))))

@@ -38,10 +38,12 @@
         (if val (push val acc))))
     (nreverse acc)))
 
+;; from the notes
 #+nil
 (defun filter (fn lst)
   (delete nil (mapcar fn lst)))
 
+;; from the notes
 #+nil
 (defun filter (fn lst)
   (mapcar (lambda (x)
@@ -58,6 +60,7 @@
                    (nreverse (cons source acc))))))
     (if source (rec source nil) nil)))
 
+;; from the notes
 #+nil
 (defun group (source n)
   (if (endp source)
@@ -74,6 +77,7 @@
                    (t (rec (car x) (rec (cdr x) acc))))))
     (rec x nil)))
 
+;; from the notes
 #+nil
 (defun flatten (x)
   (mapcan (lambda (x)
@@ -92,6 +96,7 @@
                                (cons (car tree) acc)))))))
     (rec tree nil)))
 
+;; from the notes
 #+nil
 (defun prune (test tree)
   (if (atom tree)
@@ -105,6 +110,7 @@
 
 ;; p. 50
 (defun find2 (fn lst)
+  "Return the first element in lst for which fn returns true and the result of fn"
   (if (null lst)
       nil
       (let ((val (funcall fn (car lst))))

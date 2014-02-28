@@ -3,6 +3,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Chapter 12 - Generalized Variables
 
+;; p. 166
+
+;; wrong
+#+nil
+(defmacro toggle (obj)
+  `(setf ,obj (not ,obj)))
+
 ;; p. 169
 (defmacro allf (val &rest args)
   (with-gensyms (gval)

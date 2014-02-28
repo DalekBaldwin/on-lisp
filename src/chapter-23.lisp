@@ -29,6 +29,11 @@
       'regs
       `(,@(car cmds) ,(compile-cmds (cdr cmds)))))
 
+;; note on p. 208 about how this could be implemented with on-cdrs
+#+nil
+(defun compile-cmds (cmds)
+  (on-cdrs `(,@it ,rec) 'regs cmds))
+
 (defmacro up (expr)
   `(let ((* (nth pos *sent*)))
      (=values ,expr pos (cdr regs))))

@@ -4,6 +4,8 @@
 ;;;; Chapter 16 - Macro-Defining Macros
 
 ;; p. 213
+
+;; from the notes
 #+nil
 (let ((syms nil))
   (do-symbols (s)
@@ -33,6 +35,14 @@
   `(progn
      ,@(mapcar (lambda (p) `(propmacro ,p))
                props)))
+
+;; p. 217
+
+;; from the notes
+#+nil
+(defmacro propmacro (propname)
+  `(defmacro ,propname (obj)
+     `(get ,obj ',propname)))
 
 ;; p. 219
 (defmacro a+ (&rest args)
@@ -80,6 +90,10 @@
 (defun pop-symbol (sym)
   (intern (subseq (symbol-name sym) 1)))
 
+;; p. 221
+
+
+
 ;; p. 223
 
 ;; version 2
@@ -106,7 +120,9 @@
       call))
 
 (defun anaphex2 (op args)
-  `(let ((it ,(car args))) (,op it ,@(cdr args))))
+  `(let ((it ,(car args)))
+     (,op it ,@(cdr args))))
 
 (defun anaphex3 (op args)
-  `(_f (lambda (it) (,op it ,@(cdr args))) ,(car args)))
+  `(_f (lambda (it) (,op it ,@(cdr args)))
+       ,(car args)))

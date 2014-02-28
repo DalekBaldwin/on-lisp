@@ -3,9 +3,25 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Chapter 9 - Variable Capture
 
+;; p. 125
+
+;; vulnerable to capture
+#+nil
+(defmacro before (x y seq)
+  `(let ((seq ,seq))
+     (< (position ,x seq)
+        (position ,y seq))))
+
+;; a correct version
+#+nil
+(defmacro before (x y seq)
+  `(let ((xval ,x) (yval ,y) (seq ,seq))
+     (< (position xval seq)
+        (position yval seq))))
+
 ;; p. 127
 
-;; version 1
+;; vulnerable to capture
 #+nil
 (defmacro for ((var start stop) &body body)
   `(do ((,var ,start (1+ ,var))
@@ -13,7 +29,7 @@
        ((> ,var limit))
      ,@body))
 
-;; version 2
+;; a correct version
 #+nil
 (defmacro for ((var start stop) &body body)
   `(do ((b (lambda (,var) ,@body))
@@ -24,7 +40,7 @@
 
 ;; p. 129
 
-;; version 3 -- correct
+;; another correct version
 (defmacro for ((var start stop) &body body)
   (let ((gstop (gensym)))
     `(do ((,var ,start (1+ ,var))
