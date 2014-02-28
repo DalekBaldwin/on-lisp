@@ -489,6 +489,8 @@
 
 (defpackage :on-lisp.16
   (:use :cl)
+  (:import-from :on-lisp.04
+                :group)
   (:export
    #:abbrev
    #:abbrevs
@@ -505,6 +507,7 @@
    #:anaphex1
    #:anaphex2
    #:anaphex3
+   #:asetf
    ))
 
 (defpackage :on-lisp.17
@@ -516,6 +519,8 @@
 
 (defpackage :on-lisp.18
   (:use :cl)
+  (:import-from :on-lisp.04
+                :symb)
   (:import-from :on-lisp.14
                 :acond2)
   (:export

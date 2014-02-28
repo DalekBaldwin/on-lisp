@@ -3,8 +3,18 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Chapter 17 - Read-Macros
 
-;; p. 225 - note how abbreviation for quote cannot be defined as normal macro
+;; p. 225
+
+#+nil
+(set-macro-character #\'
+  #'(lambda (stream char)
+      (list 'quote (read stream t nil t))))
+
+;; note how abbreviation for quote cannot be defined as normal macro
 ;; keep this in mind when using nested macrolet with macroexpand...
+#+nil
+(defmacro q (obj)
+  `(quote ,obj))
 
 ;; p. 226
 (set-dispatch-macro-character #\# #\?
@@ -38,6 +48,10 @@
         (declare (ignore char1 char2))
         (apply fn
                (read-delimited-list right stream t))))))
+
+#+nil
+(defdelim #\[ #\] (x y)
+  (list 'quote (mapa-b #'identity (ceiling x) (floor y))))
 
 ;; p. 229
 (defdelim #\{ #\} (&rest args)

@@ -87,12 +87,18 @@
                      (append expr (list sym)))))
       expr))
 
-(defun pop-symbol (sym)
-  (intern (subseq (symbol-name sym) 1)))
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defun pop-symbol (sym)
+    (intern (subseq (symbol-name sym) 1))))
 
 ;; p. 221
 
+;; alternate versions
+#+nil
+(defanaph a+)
 
+#+nil
+(defanaph alist)
 
 ;; p. 223
 
@@ -126,3 +132,17 @@
 (defun anaphex3 (op args)
   `(_f (lambda (it) (,op it ,@(cdr args)))
        ,(car args)))
+
+;; alternate version
+#+nil
+(defanaph aif :rule :first)
+
+(defanaph asetf :rule :place)
+
+#+nil
+(defmacro incf (place &optional (val 1))
+  `(asetf ,place ))
+
+#+nil
+(defmacro pull (obj place &rest args)
+  `(asetf ,place (delete ,obj it ,@args)))

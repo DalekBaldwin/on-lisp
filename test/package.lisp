@@ -38,6 +38,25 @@
   (unless (find-readtable :on-lisp-test)
     (defreadtable :on-lisp-test
       (:merge :standard)
+      ;; p. 226
+      (:dispatch-macro-char #\# #\?
+                            (lambda (stream char1 char2)
+                              (declare (ignore char1 char2))
+                              `(lambda (&rest ,(gensym))
+                                 ,(read stream t nil t))))
+      ;; p. 227
+      (:macro-char #\] (get-macro-character #\)))
+      (:dispatch-macro-char #\# #\[
+                            (lambda (stream char1 char2)
+                              (declare (ignore char1 char2))
+                              (let ((accum nil)
+                                    (pair (read-delimited-list #\] stream t)))
+                                (do ((i (ceiling (car pair)) (1+ i)))
+                                    ((> i (floor (cadr pair)))
+                                     (list 'quote (nreverse accum)))
+                                  (push i accum)))))
+      
+      ;; the rest of the read-macros are for convenience, not defined in the book
       (:dispatch-macro-char #\# #\@
                             ;; #@classname --> (find-class 'classname)
                             (lambda (stream subchar arg)

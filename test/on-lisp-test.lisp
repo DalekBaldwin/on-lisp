@@ -6,7 +6,10 @@
 (defun run-all-tests ()
   (test-all)
   (format t " |~%") ;; needed to avoid screwing up colors in SLIME REPL
-  (run-tests :all :on-lisp-test))
+  (let ((results
+         (run-tests :all :on-lisp-test)))
+    (print-errors results)
+    (print-failures results)))
 
 (define-test test-blah
   ;; need to have at least one lisp-unit test to not barf in REPL
@@ -215,35 +218,35 @@
 (define-test test-nthmost
   (assert-expands
    (LET ((#:G1 NUMS))
-  (UNLESS (< (LENGTH #:G1) 3)
-    (LET ((#:G8 (POP #:G1)))
-      (SETQ #:G3 #:G8))
-    (LET ((#:G7 (POP #:G1)))
-      (IF (> #:G7 #:G3)
-          (SETQ #:G4 #:G3
-                #:G3 #:G7)
-          (SETQ #:G4 #:G7)))
-    (LET ((#:G6 (POP #:G1)))
-      (IF (> #:G6 #:G3)
-          (SETQ #:G5 #:G4
-                #:G4 #:G3
-                #:G3 #:G6)
-          (IF (> #:G6 #:G4)
-              (SETQ #:G5 #:G4
-                    #:G4 #:G6)
-              (SETQ #:G5 #:G6))))
-    (DOLIST (#:G2 #:G1)
-      (IF (> #:G2 #:G3)
-          (SETQ #:G5 #:G4
-                #:G4 #:G3
-                #:G3 #:G2)
-          (IF (> #:G2 #:G4)
-              (SETQ #:G5 #:G4
-                    #:G4 #:G2)
-              (IF (> #:G2 #:G5)
-                  (SETQ #:G5 #:G2)
-                  NIL))))
-    #:G5))
+     (UNLESS (< (LENGTH #:G1) 3)
+       (LET ((#:G8 (POP #:G1)))
+         (SETQ #:G3 #:G8))
+       (LET ((#:G7 (POP #:G1)))
+         (IF (> #:G7 #:G3)
+             (SETQ #:G4 #:G3
+                   #:G3 #:G7)
+             (SETQ #:G4 #:G7)))
+       (LET ((#:G6 (POP #:G1)))
+         (IF (> #:G6 #:G3)
+             (SETQ #:G5 #:G4
+                   #:G4 #:G3
+                   #:G3 #:G6)
+             (IF (> #:G6 #:G4)
+                 (SETQ #:G5 #:G4
+                       #:G4 #:G6)
+                 (SETQ #:G5 #:G6))))
+       (DOLIST (#:G2 #:G1)
+         (IF (> #:G2 #:G3)
+             (SETQ #:G5 #:G4
+                   #:G4 #:G3
+                   #:G3 #:G2)
+             (IF (> #:G2 #:G4)
+                 (SETQ #:G5 #:G4
+                       #:G4 #:G2)
+                 (IF (> #:G2 #:G5)
+                     (SETQ #:G5 #:G2)
+                     NIL))))
+       #:G5))
    (nthmost 2 nums)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -303,6 +306,111 @@
 (deftest test-alist ()
   (is (equal (alist 1 (+ 2 it) (+ 2 it))
              #`(1 3 5))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; Chapter 17 - Read-Macros
+
+;; p. 226
+(deftest test-#? ()
+  (is (equal (mapcar #?2 #`(a b c))
+             #`(2 2 2)))
+  ;; p. 227
+  (is (eq (funcall #?'a) 'a))
+  (is (eq (funcall #?#'oddp) (symbol-function 'oddp))))
+
+
+(deftest test-sharp-brackets ()
+  (is (equal #[2 7]
+             #`(2 3 4 5 6 7))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; Chapter 18 - Destructuring
+
+;; p. 231
+(deftest test-dbind ()
+  (is (equal (dbind (a b c) #(1 2 3) (list a b c))
+             #`(1 2 3)))
+  (is (equal (dbind (a (b c) d) #`(1 #(2 3) 4) (list a b c d))
+             #`(1 2 3 4)))
+  (is (equal (dbind (a (b . c) &rest d) #`(1 "fribble" 2 3 4) (list a b c d))
+             #`(1 #\f "ribble" (2 3 4)))))
+
+;; p. 233
+(deftest test-destruc ()
+  (is (equal (destruc #`(a b c) 'seq #'atom)
+             #`((a (elt seq 0)) (b (elt seq 1)) (c (elt seq 2))))))
+
+
+(defmacro destruc-macro (pat seq)
+  (destruc pat seq))
+
+(define-test test-destruc-expand
+  (assert-expands
+   ((A (ELT SEQ 0))
+    ((#:G1 (ELT SEQ 1))
+     (B (ELT #:G1 0))
+     (C (SUBSEQ #:G1 1)))
+    (D (SUBSEQ SEQ 2)))
+   (destruc-macro (a (b . c) &rest d) seq)))
+
+(defmacro dbind-ex-macro (binds body)
+  (dbind-ex binds body))
+
+(define-test test-dbind-ex-expand
+  (assert-expands
+   (LET ((A (ELT SEQ 0))
+         (#:G1 (ELT SEQ 1))
+         (D (SUBSEQ SEQ 2)))
+     (LET ((B (ELT #:G1 0))
+           (C (SUBSEQ #:G1 1)))
+       (PROGN BODY)))
+   (dbind-ex-macro
+    ((A (ELT SEQ 0))
+     ((#:G1 (ELT SEQ 1))
+      (B (ELT #:G1 0))
+      (C (SUBSEQ #:G1 1)))
+     (D (SUBSEQ SEQ 2)))
+    (body))))
+
+;; p. 235
+(let ((ar (make-array #`(3 3))))
+  (deftest test-with-matrix ()
+    (for (r 0 2)
+      (for (c 0 2)
+        (setf (aref ar r c) (+ (* r 10) c))))
+    (is (equal (with-matrix ((a b c)
+                             (d e f)
+                             (g h i)) ar
+                 (list a b c d e f g h i))
+               #`(0 1 2 10 11 12 20 21 22))))
+  (deftest test-with-array ()
+    (is (equal (with-array ((a 0 0) (d 1 1) (i 2 2)) ar
+                 (list a d i))
+               #`(0 11 22)))))
+
+;; p. 236
+(deftest test-with-struct ()
+  (defstruct visitor name title firm)
+  (let ((theo
+         (make-visitor :name "Theodebert"
+                       :title 'king
+                       :firm 'franks)))
+    (is (equal (with-struct (visitor- name firm title) theo
+                 (list name firm title))
+               #`("Theodebert" franks king)))))
+
+(deftest test-with-places ()
+  (is (equal (with-places (a b c) #(1 2 3)
+               (list a b c))
+             #`(1 2 3)))
+  ;; p. 237
+  (is (equal
+       (let ((lst #`(1 (2 3) 4)))
+         (with-places (a (b . c) d) lst
+           (setf a 'uno)
+           (setf c '(tre)))
+         lst)
+       #`(uno (2 tre) 4))))
 
 
 
