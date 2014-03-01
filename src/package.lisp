@@ -492,6 +492,8 @@
   (:use :cl)
   (:import-from :on-lisp.04
                 :group)
+  (:import-from :on-lisp.12
+                :_f)
   (:import-from :on-lisp.14
                 :it)
   (:export

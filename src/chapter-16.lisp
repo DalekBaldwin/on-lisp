@@ -100,6 +100,25 @@
 #+nil
 (defanaph alist)
 
+#+nil
+(defmacro a+ (&rest args)
+  (anaphex args '(+)))
+
+;; p. 222
+
+#+nil
+(defmacro aif (&rest args)
+  (anaphex2 'if args))
+
+;; I haven't bothered to really check this out, but hey, this is what pg says:
+;; http://www.paulgraham.com/onlisperrata.html:
+;; p. 222. In the definition of asetf, 'setf should be '(lambda (x y) y).
+;; Caught by Francois-Rene Rideau.
+
+#+nil
+(defmacro asetf (&rest args)
+  (anaphex3 '(lambda (x y) y) args))
+
 ;; p. 223
 
 ;; version 2
