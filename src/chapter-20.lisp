@@ -43,6 +43,12 @@
 (defmacro =apply (fn &rest args)
   `(apply ,fn cont ,@args))
 
+;; from the notes -- maybe this is equivalent to Francois-Rene Rideau's fix from above?
+#+nil
+(setq *cont*
+      #'(lambda (&rest args)
+          (if (cdr args) args (car args))))
+
 ;;p. 271
 (defun dft (tree)
   (cond ((null tree) nil)

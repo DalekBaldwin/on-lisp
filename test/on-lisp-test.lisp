@@ -494,10 +494,6 @@
     (is (= (length answers) 1))
     (is (member #`(william english) answers :test #'equal))))
 
-(untrace)
-
-(interpret-query '(and (painter ?x ?y ?z) (dates ?x 1697 ?w)))
-
 (deftest born-1697% ()
   (let ((answers))
     (with-answer% (and (painter ?x _ _)
@@ -569,12 +565,31 @@
 
 ;; p. 271
 (deftest dft-test ()
-  (setq t1 #`(a (b (d h)) (c e (f i) g))
-        t2 #`(1 (2 (3 6 7) 4 5)))
-  ;;(dft2 t1)
-  )
-
-
+  (let ((t1 #`(a (b (d h)) (c e (f i) g)))
+        (t2 #`(1 (2 (3 6 7) 4 5))))
+    (is (equal
+         (with-output-to-string (str)
+           (let ((*standard-output* str))
+             (dft2 t1)))
+         "ABDHCEFIG"))
+    ;; p. 272
+    (is (equal
+         (let ((results nil))
+           (=bind (node1) (dft-node t1)
+             (if (eq node1 'done)
+                 'done
+                 (=bind (node2) (dft-node t2)
+                   (push (list node1 node2) results)
+                   (list node1 node2))))
+           (loop for result = (call-restart)
+              while (not (member 'on-lisp.20::done result)))
+           (reverse (cdr results)))
+         #`((A 1) (A 2) (A 3) (A 6) (A 7) (A 4) (A 5) (B 1) (B 2) (B 3) (B 6) (B 7)
+            (B 4) (B 5) (D 1) (D 2) (D 3) (D 6) (D 7) (D 4) (D 5) (H 1) (H 2) (H 3)
+            (H 6) (H 7) (H 4) (H 5) (C 1) (C 2) (C 3) (C 6) (C 7) (C 4) (C 5) (E 1)
+            (E 2) (E 3) (E 6) (E 7) (E 4) (E 5) (F 1) (F 2) (F 3) (F 6) (F 7) (F 4)
+            (F 5) (I 1) (I 2) (I 3) (I 6) (I 7) (I 4) (I 5) (G 1) (G 2) (G 3) (G 6)
+            (G 7) (G 4) (G 5))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Chapter 21 - Multiple Processes
