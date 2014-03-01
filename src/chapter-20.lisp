@@ -31,6 +31,21 @@
          `(,',f cont ,,@parms))
        (defun ,f (cont ,@parms) ,@body))))
 
+;; needed for ATNs in chapter 23
+(defmacro =defuns (&body defns)
+  (let ((pairs
+         (mapcar
+          (lambda (defn)
+            (cons defn
+                  (intern (concatenate 'string "=" (symbol-name (car defn))))))
+          defns)))
+    `(progn
+       ,@(loop for (defn . fname) in pairs
+           collect `(defmacro ,(car defn) ,(cadr defn)
+                      `(,',fname cont ,,@(cadr defn))))
+       ,@(loop for (defn . fname) in pairs
+             collect `(defun ,fname (cont ,@(cadr defn)) ,@(cddr defn))))))
+
 (defmacro =bind (parms expr &body body)
   `(let ((cont (lambda ,parms ,@body))) ,expr))
 

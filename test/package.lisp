@@ -30,7 +30,7 @@
         :on-lisp.25
         )
   (:export
-   #:test-all))
+   #:run-all-tests))
 
 (in-package :on-lisp-test)
 

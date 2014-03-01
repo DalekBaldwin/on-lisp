@@ -597,8 +597,10 @@
 (defpackage :on-lisp.20
   (:use :cl)
   (:export
+   ;;#:cont
    ;;#:=lambda
    #:=defun
+   #:=defuns
    #:=bind
    #:=values
    #:=funcall
@@ -638,7 +640,7 @@
 (defpackage :on-lisp.22
   (:use :cl)
   (:export
-   ;;#:*paths*
+   #:*paths*
    ;;#:failsym
    #:choose
    #:choose-bind
@@ -648,11 +650,20 @@
 
 (defpackage :on-lisp.23
   (:use :cl)
+  (:import-from :on-lisp.11
+                :with-gensyms)
   (:import-from :on-lisp.20
                 :=defun
-                :=bind)
+                :=defuns
+                :=bind
+                :=values)
+  (:import-from :on-lisp.22
+                :*paths*
+                :choose
+                :fail)
   (:export
    #:def-atn-node
+   #:def-atn-nodes
    #:down
    #:cat
    #:jump
@@ -662,7 +673,9 @@
    #:set-register
    #:setr
    #:pushr
-   ))
+   #:*types*
+   #:with-parses
+   #:parse))
 
 (defpackage :on-lisp.24
   (:use :cl)

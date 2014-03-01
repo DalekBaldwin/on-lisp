@@ -197,6 +197,8 @@
                                 choices)))
      (fail))))
 
+;;(define *choice-pts* (make-symbol-table))
+
 ;;(define-syntax (true-choose choices)
 ;;  `(choose-fn ,choices ',(generate-symbol t)))
 

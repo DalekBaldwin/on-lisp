@@ -707,15 +707,195 @@ Rebuilding ROME.
 
 (deftest descent-test ()
   (is (equal (descent 'a 'g)
-             #`(a c f g))))
+             #`(a c f g)))
+  (is (equal (descent 'a 'd)
+             #`(a b d))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Chapter 23 - An ATN Compiler
-(def-atn-node s
-    (down np s/subj
-          (setr mood 'decl))
-  (cat v v
-       (setr mood 'imp)
-       (setr subj '(np (pron you)))
-       (setr aux nil)
-       (setr v *)))
+
+;; p. 307
+
+(def-atn-nodes
+  (s1
+      (cat noun s2
+           (setr subj *)))
+
+  (s2
+      (cat verb s3
+           (setr v *)))
+
+  (s3
+    (up `(sentence
+          (subject ,(getr subj))
+          (verb ,(getr v))))))
+
+;; p. 313
+(deftest test-compile-cmds ()
+  (is (equal (compile-cmds '((setr a b) (setr c d)))
+             #`(setr a b (setr c d on-lisp.23::regs))))
+  (is (equal (compile-cmds '((setr a b) (progn (princ "ek!")) (setr c d)))
+             #`(setr a b (progn (princ "ek!") (setr c d on-lisp.23::regs))))))
+
+;; p. 314
+(deftest test-with-parses ()
+  (let* ((*types* #`((spot noun) (runs verb)))
+         (parsed
+          (with-output-to-string (out-str)
+            (let ((*standard-output* out-str))
+              (with-parses s1 '(spot runs)
+                (format t "Parsing: ~A~%" parse))))))
+    (is (equal
+         parsed
+         "Parsing: (SENTENCE (SUBJECT SPOT) (VERB RUNS))
+"))))
+
+;; p. 315
+(defparameter *time-arrow-types*
+  (loop for cases in
+       #`(((do does did) (aux v))
+          ((time times) (n v))
+          ((fly flies) (n v))
+          ((like) (v prep))
+          ((liked likes) (v))
+          ((a an the) (det))
+          ((arrow arrows) (n))
+          ((i you he she him her it) (pron)))
+     appending (loop for word in (car cases)
+                  collect (cons word (cadr cases)))))
+
+;; p. 316
+(def-atn-nodes
+  (mods
+      (cat n mods/n
+           (setr mods *)))
+
+  (mods/n
+      (cat n mods/n
+           (pushr mods *))
+    (up `(n-group ,(getr mods)))))
+
+(deftest test-time-arrow-with-parses ()
+  (let* ((*types* *time-arrow-types*)
+         (parsed
+          (with-output-to-string (out-str)
+            (let ((*standard-output* out-str))
+              (with-parses mods '(time arrow)
+                (format t "Parsing: ~A~%" parse))))))
+    (is (equal
+         parsed
+         "Parsing: (N-GROUP (ARROW TIME))
+"))))
+
+;; p. 317
+(def-atn-nodes
+  (np
+   (cat det np/det
+        (setr det *))
+   (jump np/det
+         (setr det nil))
+   (cat pron pron
+        (setr n *)))
+
+  (pron
+   (up `(np (pronoun ,(getr n)))))
+
+  (np/det
+   (down mods np/mods
+         (setr mods *))
+   (jump np/mods
+         (setr mods nil)))
+
+  (np/mods
+   (cat n np/n
+        (setr n *)))
+
+  (np/n
+   (up `(np (det ,(getr det))
+            (modifiers ,(getr mods))
+            (noun ,(getr n))))
+   (down pp np/pp
+         (setr pp *)))
+
+  (np/pp
+   (up `(np (det ,(getr det))
+            (modifiers ,(getr mods))
+            (noun ,(getr n))
+            ,(getr pp))))
+
+  (pp
+   (cat prep pp/prep
+        (setr prep *)))
+
+  (pp/prep
+   (down np pp/np
+         (setr op *)))
+
+  (pp/np
+   (up `(pp (prep ,(getr prep))
+            (obj ,(getr op))))))
+
+(deftest test-parse-np ()
+  (let ((*types* *time-arrow-types*)
+        (parses nil))
+    (with-parses np '(it)
+      (push parse parses))
+    (is (equal parses #`((NP (PRONOUN IT)))))
+    (setf parses nil)
+    (with-parses np '(arrows)
+      (push parse parses))
+    (is (equal parses #`((NP (DET NIL) (MODIFIERS NIL) (NOUN ARROWS)))))
+    (setf parses nil)
+    (with-parses np '(a time fly like him)
+      (push parse parses))
+    (is (equal parses
+               #`((NP (DET A) (MODIFIERS (N-GROUP TIME)) (NOUN FLY)
+                      (PP (PREP LIKE) (OBJ (NP (PRONOUN HIM))))))))))
+
+;; p. 319
+(def-atn-nodes
+  (s
+      (down np s/subj
+            (setr mood 'decl)
+            (setr subj *))
+    (cat v v
+         (setr mood 'imp) 
+         (setr subj '(np (pron you)))
+         (setr aux nil)
+         (setr v *)))
+
+  (s/subj
+      (cat v v
+           (setr aux nil)
+           (setr v *)))
+
+  (v
+      (up `(s (mood ,(getr mood))
+              (subj ,(getr subj))
+              (vcl (aux ,(getr aux))
+                   (v ,(getr v)))))
+    (down np s/obj
+          (setr obj *)))
+
+  (s/obj
+    (up `(s (mood ,(getr mood))
+            (subj ,(getr subj))
+            (vcl (aux ,(getr aux))
+                 (v ,(getr v)))
+            (obj ,(getr obj))))))
+
+(deftest test-parse-s ()
+  (let ((*types* *time-arrow-types*)
+        (parses nil))
+    (with-parses s '(time flies like an arrow)
+      (push parse parses))
+    (is (equal parses
+               #`((S (MOOD IMP) (SUBJ (NP (PRON YOU))) (VCL (AUX NIL) (V TIME))
+                     (OBJ
+                      (NP (DET NIL) (MODIFIERS NIL) (NOUN FLIES)
+                          (PP (PREP LIKE)
+                              (OBJ (NP (DET AN) (MODIFIERS NIL) (NOUN ARROW)))))))
+                  (S (MOOD DECL)
+                     (SUBJ (NP (DET NIL) (MODIFIERS (N-GROUP TIME)) (NOUN FLIES)))
+                     (VCL (AUX NIL) (V LIKE))
+                     (OBJ (NP (DET AN) (MODIFIERS NIL) (NOUN ARROW)))))))))
