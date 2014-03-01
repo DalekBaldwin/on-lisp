@@ -626,8 +626,17 @@
   (fork (host 'door2) 1))
 
 (deftest ballet-test ()
-  ;;(ballet)
-  nil)
+  (is (equal
+       (let ((*bboard* nil))
+         (with-output-to-string (out-str)
+           (let ((*standard-output* out-str))
+             (with-input-from-string (in-str "(halt)")
+               (let ((*standard-input* in-str))
+                 (ballet))))))
+       "Approach DOOR2. Open DOOR2. Enter DOOR2. Close DOOR2.
+Approach DOOR1. Open DOOR1. Enter DOOR1. Close DOOR1.
+
+>> ")))
 
 ;; p. 283
 (=defun capture (city)
@@ -648,6 +657,20 @@
 (program barbarians ()
   (fork (capture 'rome) 100)
   (fork (plunder 'rome) 98))
+
+(deftest barbarians-test ()
+  (is (equal
+       (with-output-to-string (out-str)
+         (let ((*standard-output* out-str))
+           (with-input-from-string (in-str "(halt)")
+             (let ((*standard-input* in-str))
+               (barbarians)))))
+       "Liberating ROME.
+Nationalizing ROME.
+Refinancing ROME.
+Rebuilding ROME.
+
+>> ")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Chapter 22 - Nondeterminism

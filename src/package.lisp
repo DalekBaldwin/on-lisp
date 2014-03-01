@@ -631,8 +631,8 @@
    ;;#:arbitrator
    #:yield
    #:setpri
-   ;;#:halt
-   ;;#:kill
+   #:halt
+   #:kill
    ))
 
 (defpackage :on-lisp.22

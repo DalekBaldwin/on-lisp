@@ -110,7 +110,8 @@
 (defmacro aif (&rest args)
   (anaphex2 'if args))
 
-;; I haven't bothered to really check this out, but hey, this is what pg says:
+;; This sounds weird and I haven't really bothered to check this out, but hey,
+;; this is what pg says:
 ;; http://www.paulgraham.com/onlisperrata.html:
 ;; p. 222. In the definition of asetf, 'setf should be '(lambda (x y) y).
 ;; Caught by Francois-Rene Rideau.

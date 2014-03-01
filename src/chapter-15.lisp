@@ -133,8 +133,10 @@
 
 ;;(defconstant unforced (gensym))
 
-;; changed as per:
+;; changed according to discussion found here:
 ;; http://coding.derkeiler.com/Archive/Lisp/comp.lang.lisp/2009-06/msg00968.html
+;; I had to add :load-toplevel too to stop the test package from complaining
+;; about `unforced` being unbound half the time.
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (define-symbol-macro unforced (load-time-value *unforced*)))
 (defvar *unforced* (list :unforced))

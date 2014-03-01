@@ -107,6 +107,7 @@
        ,@(mapcar #'fourth meths))))
 
 ;; p. 178 -- is this the notion of "first class macro" Doug Hoyte talks about?
+;; see also p. 110/111, "Functions are data"
 
 ;; p. 179
 #+nil
