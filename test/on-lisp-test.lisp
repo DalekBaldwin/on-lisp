@@ -494,6 +494,10 @@
     (is (= (length answers) 1))
     (is (member #`(william english) answers :test #'equal))))
 
+(untrace)
+
+(interpret-query '(and (painter ?x ?y ?z) (dates ?x 1697 ?w)))
+
 (deftest born-1697% ()
   (let ((answers))
     (with-answer% (and (painter ?x _ _)
@@ -535,18 +539,18 @@
                       (dates ?x ?b _)
                       (not (and (painter ?x2 _ 'venetian)
                                 (dates ?x2 ?b _))))
-      (push (list ?x) answers)
-      (is (equal answers #`((reynolds)))))))
+      (push (list ?x) answers))
+    (is (equal answers #`((reynolds))))))
 
 (deftest died-1770-to-1800 ()
   (let ((answers))
     (with-answer (and (painter ?x _ _)
                       (dates ?x _ ?d)
                       (lisp (< 1770 ?d 1800)))
-      (push (list ?x ?d) answers)
-      (is (= (length answers) 2))
-      (is (member #`(reynolds 1792) answers :test #'equal))
-      (is (member #`(hogarth 1772) answers :test #'equal)))))
+      (push (list ?x ?d) answers))
+    (is (= (length answers) 2))
+    (is (member #`(reynolds 1792) answers :test #'equal))
+    (is (member #`(hogarth 1772) answers :test #'equal))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Chapter 20 - Continuations

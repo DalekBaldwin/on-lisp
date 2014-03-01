@@ -1,7 +1,7 @@
 (in-package :cl-user)
 
-(defpackage #:on-lisp
-  (:use #:cl)
+(defpackage :on-lisp
+  (:use :cl)
   (:export
    #:last1
    #:single
@@ -585,6 +585,7 @@
    #:lookup
    #:with-answer
    #:compile-query
+   #:lisp
    #:compile-simple
    #:compile-and
    #:compile-or
