@@ -31,7 +31,7 @@
          `(,',f cont ,,@parms))
        (defun ,f (cont ,@parms) ,@body))))
 
-;; needed for ATNs in chapter 23
+;; needed for ATNs in chapter 23 and "prove-" clauses in chapter 24
 (defmacro =defuns (&body defns)
   (let ((pairs
          (mapcar

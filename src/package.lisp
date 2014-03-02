@@ -679,7 +679,42 @@
 
 (defpackage :on-lisp.24
   (:use :cl)
-  (:export))
+  (:import-from :on-lisp.04
+                :symb)
+  (:import-from :on-lisp.12
+                :conc1f)
+  (:import-from :on-lisp.14
+                :it
+                :aif2)
+  (:import-from :on-lisp.18
+                :match
+                :varsym?
+                :binding
+                :vars-in
+                :_)
+  (:import-from :on-lisp.20
+                :=defun
+                :=defuns
+                :=bind
+                :=values
+                )
+  (:import-from :on-lisp.22
+                :*paths*
+                :choose-bind
+                :fail
+                )
+  (:export
+   #:with-inference
+   #:rep_
+   #:fullbind
+   #:prove-query
+   #:prove-and
+   #:prove-or
+   #:prove-not
+   #:prove-simple
+   ;;#:*rlist*
+   #:<-
+   ))
 
 (defpackage :on-lisp.25
   (:use :cl)
