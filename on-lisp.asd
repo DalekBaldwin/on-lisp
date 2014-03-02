@@ -50,9 +50,11 @@
                                               "chapter-22"))
              (:file "chapter-24" :depends-on ("package"
                                               "chapter-04"
+                                              "chapter-11"
                                               "chapter-12"
                                               "chapter-14"
                                               "chapter-18"
+                                              "chapter-19"
                                               "chapter-20"
                                               "chapter-22"))
              (:file "chapter-25" :depends-on ("package")))))

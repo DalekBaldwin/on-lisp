@@ -598,7 +598,7 @@
   (:use :cl)
   (:export
    ;;#:cont
-   ;;#:=lambda
+   #:=lambda
    #:=defun
    #:=defuns
    #:=bind
@@ -681,22 +681,32 @@
   (:use :cl)
   (:import-from :on-lisp.04
                 :symb)
+  (:import-from :on-lisp.11
+                :with-gensyms)
   (:import-from :on-lisp.12
                 :conc1f)
   (:import-from :on-lisp.14
                 :it
+                :acond2
                 :aif2)
   (:import-from :on-lisp.18
                 :match
                 :varsym?
                 :binding
                 :vars-in
-                :_)
+                :simple?
+                :_
+                :gensym?
+                )
+  (:import-from :on-lisp.19
+                :lisp)
   (:import-from :on-lisp.20
+                :=lambda
                 :=defun
                 :=defuns
                 :=bind
                 :=values
+                :=funcall
                 )
   (:import-from :on-lisp.22
                 :*paths*
@@ -704,7 +714,7 @@
                 :fail
                 )
   (:export
-   #:with-inference
+   #:with-inference%
    #:rep_
    #:fullbind
    #:prove-query
@@ -713,7 +723,12 @@
    #:prove-not
    #:prove-simple
    ;;#:*rlist*
+   #:<-%
+   #:with-inference%%
+   ;;#:*rules*
    #:<-
+   #:with-inference
+   #:cut
    ))
 
 (defpackage :on-lisp.25
