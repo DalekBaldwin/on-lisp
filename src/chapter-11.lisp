@@ -28,7 +28,10 @@
 
 (defmacro with-gensyms (syms &body body)
   `(let ,(mapcar (lambda (s)
-                   `(,s (gensym ,(symbol-name s))))
+                   `(,s (gensym
+                         ;;,(symbol-name s)
+                         ;; ^^^ this can be nice for making expansions more readable
+                         )))
                  syms)
      ,@body))
 

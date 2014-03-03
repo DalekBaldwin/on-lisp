@@ -326,7 +326,7 @@
                  (=values ,binds))))))
 
 (defmacro with-binds (binds expr)
-  `(let ,(mapcar #'(lambda (v) `(,v (fullbind ,v ,binds)))
+  `(let ,(mapcar #'(lambda (v) `(,v (compiled-fullbind ,v ,binds)))
                  (vars-in expr))
      ,expr))
 
@@ -339,4 +339,3 @@
   `(aif2 (compiled-match ,expr1 (with-binds ,binds ,expr2) ,binds)
          (=values it)
          (fail)))
-

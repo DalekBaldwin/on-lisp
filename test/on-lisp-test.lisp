@@ -214,7 +214,7 @@
    (most-of (a) (b) (c))))
 
 ;; p. 185
-#+(and sbcl nil)
+#+sbcl
 (define-test test-nthmost
   (assert-expands
    (LET ((#:G1 NUMS))
@@ -1107,7 +1107,7 @@ T ")))
   (<- (ordered (?x ?y . ?ys))
       (lisp (<= ?x ?y))
       (ordered (?y . ?ys)))
-  
+
   (is (equal
        (let ((results nil))
          (with-inference (ordered '(1 2 3))
@@ -1152,6 +1152,37 @@ T ")))
       (lisp (> ?x ?y))
       (partition ?xs ?y ?ls ?bs))
   (<- (partition nil ?y nil nil))
-  
-  )
 
+  (is (equal
+       (let ((results nil))
+         (with-inference (quicksort '(3 2 1) ?x)
+           (push ?x results))
+         results)
+       #`((1 2 3))))
+  
+  (<- (echo)
+      (on-lisp.24::is ?x (read))
+      (echo ?x))
+  (<- (echo 'done)
+      (cut))
+  (<- (echo ?x)
+      (lisp (prog1 t (format t "~A~%" ?x)))
+      (on-lisp.24::is ?y (read))
+      (cut)
+      (echo ?y))
+  ;; p. 346
+  (is (equal
+       (with-output-to-string (out-str)
+         (let ((*standard-output* out-str))
+           (with-input-from-string (in-str "hi
+ho
+done
+")
+             (let ((*standard-input* in-str))
+               (with-inference (echo))))))
+       "HI
+HO
+")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; Chapter 25 - Object-Oriented Lisp
