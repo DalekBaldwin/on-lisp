@@ -1186,3 +1186,95 @@ HO
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Chapter 25 - Object-Oriented Lisp
+
+;; p. 352
+(deftest test-rget% ()
+  (let ((scoundrel (make-hash-table))
+        (patriot (make-hash-table))
+        (patriotic-scoundrel (make-hash-table)))
+    (setf (gethash 'serves scoundrel) 'self
+          (gethash 'serves patriot) 'country
+          (gethash 'parents patriotic-scoundrel) (list scoundrel patriot))
+    (is (eq (rget% patriotic-scoundrel 'serves)
+            'self))))
+
+;; p. 354
+(progn
+  (setq patriot (obj))
+  (setq scoundrel (obj))
+  (setq patriotic-scoundrel (obj scoundrel patriot))
+  (defprop% serves))
+
+(deftest test-defprop% ()
+  (setf (serves scoundrel) 'self)
+  (setf (serves patriot) 'country)
+  (is (eq (serves patriotic-scoundrel)
+          'self)))
+
+(mapcar (lambda (x)
+          (loop for blarf being the hash-keys of x
+             collect (list blarf (gethash blarf x))))
+        (on-lisp.25::ancestors patriotic-scoundrel))
+
+
+;; p. 357
+(progn
+  (setq rectangle (obj))
+  (defprop height)
+  (defprop width)
+  (defmeth (area) rectangle (r)
+    (* (height r) (width r))))
+
+(deftest test-defmeth ()
+  (is (=
+       (let ((myrec (obj rectangle)))
+         (setf (height myrec) 2
+               (width myrec) 3)
+         (area myrec))
+       6)))
+
+;; p. 359
+(progn
+  (setq filesystem (obj))
+  (defmeth (backup :before) filesystem (fs)
+    (format t "Remember to mount the tape.~%"))
+  (defmeth (backup) filesystem (fs)
+    (format t "Oops, deleted all your files.~%")
+    'done)
+  (defmeth (backup :after) filesystem (fs)
+    (format t "Well, that was easy.~%")))
+
+(deftest test-filesystem ()
+  (is (equal
+       (with-output-to-string (out-str)
+         (let ((*standard-output* out-str))
+           (backup (obj filesystem))))
+       "Remember to mount the tape.
+Oops, deleted all your files.
+Well, that was easy.
+")))
+
+;; p. 360
+#+nil
+(progn
+  (pop (parents patriotic-scoundrel))
+  (serves patriotic-scoundrel))
+
+;; p. 363
+#+nil
+(progn
+  (setq citrus (obj))
+  (setq orange (obj citrus))
+  ;; p. 364
+  (setq my-orange (obj orange))
+  (defmeth (props) citrus (c) '(round acidic))
+  (defmeth (props) orange (o) '(orange sweet))
+  (defmeth (props) my-orange (m) '(dented)))
+#+nil
+(deftest test-orange ()
+  (defcomb props (lambda (&rest args) (reduce #'union args)))
+  (is (equal (props my-orange)
+             #`(dented orange sweet round acidic)))
+  (defcomb props :standard)
+  (is (equal (props my-orange)
+             #`(dented))))

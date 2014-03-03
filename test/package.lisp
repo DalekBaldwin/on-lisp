@@ -1,7 +1,4 @@
 (defpackage #:on-lisp-test
-  #+nil
-  (:use :cl :on-lisp
-        :stefil :lisp-unit :named-readtables)
   (:use :cl :stefil :lisp-unit
         :named-readtables
         :on-lisp.02

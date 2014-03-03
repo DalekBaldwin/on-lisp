@@ -11,7 +11,6 @@
    (:module :src
             :components
             ((:file "package")
-             (:file "on-lisp" :depends-on ("package"))
              (:file "chapter-02" :depends-on ("package"))
              (:file "chapter-03" :depends-on ("package"))
              (:file "chapter-04" :depends-on ("package"))
@@ -57,7 +56,8 @@
                                               "chapter-19"
                                               "chapter-20"
                                               "chapter-22"))
-             (:file "chapter-25" :depends-on ("package")))))
+             (:file "chapter-25" :depends-on ("package"
+                                              "chapter-04")))))
   :depends-on ())
 
 (defsystem :on-lisp-test
