@@ -655,17 +655,17 @@ Rebuilding ROME.
 
 (def-atn-nodes
   (s1
-      (cat noun s2
-           (setr subj *)))
+   (cat noun s2
+        (setr subj *)))
 
   (s2
-      (cat verb s3
-           (setr v *)))
+   (cat verb s3
+        (setr v *)))
 
   (s3
-    (up `(sentence
-          (subject ,(getr subj))
-          (verb ,(getr v))))))
+   (up `(sentence
+         (subject ,(getr subj))
+         (verb ,(getr v))))))
 
 ;; p. 313
 (deftest test-compile-cmds ()
@@ -704,13 +704,13 @@ Rebuilding ROME.
 ;; p. 316
 (def-atn-nodes
   (mods
-      (cat n mods/n
-           (setr mods *)))
+   (cat n mods/n
+        (setr mods *)))
 
   (mods/n
-      (cat n mods/n
-           (pushr mods *))
-    (up `(n-group ,(getr mods)))))
+   (cat n mods/n
+        (pushr mods *))
+   (up `(n-group ,(getr mods)))))
 
 (deftest test-time-arrow-with-parses ()
   (let* ((*types* *time-arrow-types*)
@@ -792,34 +792,34 @@ Rebuilding ROME.
 ;; p. 319
 (def-atn-nodes
   (s
-      (down np s/subj
-            (setr mood 'decl)
-            (setr subj *))
-    (cat v v
-         (setr mood 'imp) 
-         (setr subj '(np (pron you)))
-         (setr aux nil)
-         (setr v *)))
+   (down np s/subj
+         (setr mood 'decl)
+         (setr subj *))
+   (cat v v
+        (setr mood 'imp) 
+        (setr subj '(np (pron you)))
+        (setr aux nil)
+        (setr v *)))
 
   (s/subj
-      (cat v v
-           (setr aux nil)
-           (setr v *)))
+   (cat v v
+        (setr aux nil)
+        (setr v *)))
 
   (v
-      (up `(s (mood ,(getr mood))
-              (subj ,(getr subj))
-              (vcl (aux ,(getr aux))
-                   (v ,(getr v)))))
-    (down np s/obj
-          (setr obj *)))
+   (up `(s (mood ,(getr mood))
+           (subj ,(getr subj))
+           (vcl (aux ,(getr aux))
+                (v ,(getr v)))))
+   (down np s/obj
+         (setr obj *)))
 
   (s/obj
-    (up `(s (mood ,(getr mood))
-            (subj ,(getr subj))
-            (vcl (aux ,(getr aux))
-                 (v ,(getr v)))
-            (obj ,(getr obj))))))
+   (up `(s (mood ,(getr mood))
+           (subj ,(getr subj))
+           (vcl (aux ,(getr aux))
+                (v ,(getr v)))
+           (obj ,(getr obj))))))
 
 (deftest test-parse-s ()
   (let ((*types* *time-arrow-types*)
