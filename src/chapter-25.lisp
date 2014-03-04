@@ -1,14 +1,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Chapter 25 - Object-Oriented Lisp
 
-;;######################### ;; version 1: total runtime system
-(in-package :on-lisp.25.v1)
-
 ;; p. 349
 #+nil
 (defun area (x)
   (cond ((rectangle-p x) (* (height x) (width x)))
         ((circle-p x) (* pi (expt (radius x) 2)))))
+
+;; version 0-ish
 
 ;; p. 350
 #+nil
@@ -22,6 +21,9 @@
         (values val win)
         (let ((par (gethash 'parent obj)))
           (and par (rget par prop))))))
+
+;;######################### ;; version 1: total runtime system
+(in-package :on-lisp.25.v1)
 
 ;; p. 351
 (defun rget (obj prop)
@@ -429,7 +431,7 @@
 ;; p. 363
 
 (defun comb-and (obj name args ancs &optional (last t))
-  (if (null ancs) ;; wtf are ancs?
+  (if (null ancs)
       last
       (let ((pm (meth- primary (gethash name (car ancs)))))
         (if pm
