@@ -443,3 +443,7 @@
        (let ((pm (meth- primary (gethash name (car ancs)))))
          (or (and-pm (apply pm obj args))
              (comb-or obj name args (cdr ancs))))))
+
+;; And the rest of the chapter is pretty much just an overview of CLOS.
+;; If you've had fun with On Lisp, why not try picking up Art of the Metaobject
+;; Protocol next?
