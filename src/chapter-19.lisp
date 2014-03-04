@@ -1,7 +1,8 @@
-(in-package :on-lisp.19)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Chapter 19 - A Query Compiler
+
+;;##################################
+(in-package :on-lisp.19.interpreted)
 
 ;; p. 248
 (defun make-db (&optional (size 100))
@@ -25,7 +26,7 @@
 ;; p. 251
 
 ;; interpreted version
-(defmacro with-answer% (query &body body)
+(defmacro with-answer (query &body body)
   (let ((binds (gensym)))
     `(dolist (,binds (interpret-query ',query))
        (let ,(mapcar (lambda (v)
@@ -61,6 +62,27 @@
   (mapcan (lambda (x)
             (aif2 (match x args binds) (list it)))
           (db-query pred)))
+
+;;###############################
+(in-package :on-lisp.19.compiled)
+
+(defun make-db (&optional (size 100))
+  (make-hash-table :size size))
+
+(defvar *default-db* (make-db))
+
+(defun clear-db (&optional (db *default-db*))
+  (clrhash db))
+
+(defmacro db-query (key &optional (db '*default-db*))
+  `(gethash ,key ,db))
+
+(defun db-push (key val &optional (db *default-db*))
+  (push val (db-query key db)))
+
+(defmacro fact (pred &rest args)
+  `(progn (db-push ',pred ',args)
+          ',args))
 
 ;; p. 255
 

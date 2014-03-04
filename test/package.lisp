@@ -17,11 +17,22 @@
         :on-lisp.16
         :on-lisp.17
         :on-lisp.18
-        :on-lisp.19
         :on-lisp.20
         :on-lisp.21
         :on-lisp.22
         :on-lisp.23)
+  (:export
+   #:run-all-tests))
+
+(defpackage :on-lisp.19.interpreted.test
+  (:use :cl :stefil :lisp-unit :named-readtables
+        :on-lisp.19.interpreted)
+  (:export
+   #:run-all-tests))
+
+(defpackage :on-lisp.19.compiled.test
+  (:use :cl :stefil :lisp-unit :named-readtables
+        :on-lisp.19.compiled)
   (:export
    #:run-all-tests))
 

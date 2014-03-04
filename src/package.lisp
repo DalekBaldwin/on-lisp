@@ -327,6 +327,7 @@
    #:length-test
    ))
 
+#+nil
 (defpackage :on-lisp.19
   (:use :cl)
   (:import-from :on-lisp.11
@@ -361,6 +362,64 @@
    #:compile-and
    #:compile-or
    #:compile-not
+   ))
+
+(defpackage :on-lisp.19.interpreted
+  (:use :cl)
+  (:import-from :on-lisp.14
+                :it
+                :aif2)
+  (:import-from :on-lisp.18
+                :match
+                :binding
+                :vars-in
+                :_)
+  (:export
+   #:make-db
+   #:*default-db*
+   #:clear-db
+   #:db-query
+   #:db-push
+   #:fact
+   #:with-answer
+   #:interpret-query
+   #:interpret-and
+   #:interpret-or
+   #:interpret-not
+   ;;#:lookup
+   #:_
+   ))
+
+(defpackage :on-lisp.19.compiled
+  (:use :cl)
+  (:import-from :on-lisp.11
+                :with-gensyms)
+  (:import-from :on-lisp.14
+                :it
+                :aif2)
+  (:import-from :on-lisp.18
+                :match
+                :binding
+                :vars-in
+                :pat-match
+                :simple?
+                :_)
+  (:export
+   #:make-db
+   #:*default-db*
+   #:clear-db
+   #:db-query
+   #:db-push
+   #:fact
+   ;;#:lookup
+   #:with-answer
+   #:compile-query
+   #:lisp
+   #:compile-simple
+   #:compile-and
+   #:compile-or
+   #:compile-not
+   #:_
    ))
 
 (defpackage :on-lisp.20
@@ -532,7 +591,7 @@
                 :_
                 :gensym?
                 )
-  (:import-from :on-lisp.19
+  (:import-from :on-lisp.19.compiled
                 :lisp)
   (:import-from :on-lisp.20
                 :=lambda
