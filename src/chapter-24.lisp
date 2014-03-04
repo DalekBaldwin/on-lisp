@@ -1,12 +1,12 @@
-(in-package :on-lisp.24)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Chapter 24 - Prolog
 
+;;##################################
+(in-package :on-lisp.24.interpreted)
+
 ;; p. 324
 
-;; interpreted version
-(defmacro with-inference% (query &body body)
+(defmacro with-inference (query &body body)
   `(progn
      (setq *paths* nil)
      (=bind (binds) (prove-query ',(rep_ query) nil)
@@ -41,37 +41,6 @@
        (return t))))
 
 ;; p. 326
-#+nil
-(=defun prove-query (expr binds)
-  (case (car expr)
-    (and (prove-and (cdr expr) binds))
-    (or (prove-or (cdr expr) binds))
-    (not (prove-not (cdr expr) binds))
-    (t (prove-simple expr binds))))
-#+nil
-(=defun prove-and (clauses binds)
-  (if (null clauses)
-      (=values binds)
-      (=bind (binds) (prove-query (car clauses) binds)
-        (prove-and (cdr clauses) binds))))
-#+nil
-(=defun prove-or (clauses binds)
-  (choose-bind c clauses
-    (prove-query c binds)))
-#+nil
-(=defun prove-not (expr binds)
-  (let ((save-path *paths*))
-    (setq *paths* nil)
-    (choose (=bind (b) (prove-query expr binds)
-              (setq *paths* save-paths)
-              (fail))
-            (progn
-              (setq *paths* save-paths)
-              (=values binds)))))
-#+nil
-(=defun prove-simple (query binds)
-  (choose-bind r *rlist*
-    (implies r query binds)))
 
 (=defuns
   (prove-query (expr binds)
@@ -115,18 +84,11 @@
 
 (defvar *rlist* nil)
 
-(defmacro <-% (con &rest ant)
+(defmacro <- (con &rest ant)
   (let ((ant (if (= (length ant) 1)
                  (car ant)
                  `(and ,@ant))))
     `(length (conc1f *rlist* (rep_ (cons ',ant ',con))))))
-
-#+nil
-(=defun implies (r query binds)
-  (let ((r2 (change-vars r)))
-    (aif2 (match query (cdr r2) binds)
-          (prove-query (car r2) it)
-          (fail))))
 
 (defun change-vars (r)
   (sublis (mapcar (lambda (v)
@@ -134,17 +96,25 @@
                   (vars-in r #'atom))
           r))
 
+;;###############################
+(in-package :on-lisp.24.compiled)
+
+(defun rep_ (x)
+  (if (atom x)
+      (if (eq x '_) (gensym "?") x)
+      (cons (rep_ (car x)) (rep_ (cdr x)))))
+
 ;; p. 335
 
 ;; compiled version without cuts
-(defmacro with-inference%% (query &rest body)
+(defmacro with-inference (query &rest body)
   (let ((vars (vars-in query #'simple?))
         (gb (gensym)))
     `(with-gensyms ,vars
        (setq *paths* nil)
-       (=bind (,gb) ,(gen-query% (rep_ query))
+       (=bind (,gb) ,(gen-query (rep_ query))
          (let ,(mapcar (lambda (v)
-                         `(,v (compiled-fullbind ,v ,gb)))
+                         `(,v (fullbind ,v ,gb)))
                        vars)
            ,@body)
          (fail)))))
@@ -158,63 +128,61 @@
 (defun varsym? (x) ;; same definition as `gensym?`
   (and (symbolp x) (not (symbol-package x))))
 
-(defun compiled-match (x y &optional binds)
+(defun match (x y &optional binds)
   (acond2
    ((or (eql x y) (eql x '_) (eql y '_)) (values binds t))
-   ((binding x binds) (compiled-match it y binds))
-   ((binding y binds) (compiled-match x it binds))
+   ((binding x binds) (match it y binds))
+   ((binding y binds) (match x it binds))
    ((gensym? x) (values (cons (cons x y) binds) t))
    ((gensym? y) (values (cons (cons y x) binds) t))
-   ((and (consp x) (consp y) (compiled-match (car x) (car y) binds))
-    (compiled-match (cdr x) (cdr y) it))
+   ((and (consp x) (consp y) (match (car x) (car y) binds))
+    (match (cdr x) (cdr y) it))
    (t (values nil nil))))
 
-(defun compiled-fullbind (x b)
+(defun fullbind (x b)
   (cond ((gensym? x) (aif2 (binding x b)
-                           (compiled-fullbind it b)
+                           (fullbind it b)
                            (gensym)))
         ((atom x) x)
-        (t (cons (compiled-fullbind (car x) b)
-                 (compiled-fullbind (cdr x) b)))))
+        (t (cons (fullbind (car x) b)
+                 (fullbind (cdr x) b)))))
 
 ;; p. 336
 
-(defun gen-query% (expr &optional binds)
+(defun gen-query (expr &optional binds)
   (case (car expr)
-    (and (gen-and% (cdr expr) binds))
-    (or (gen-or% (cdr expr) binds))
-    (not (gen-not% (cadr expr) binds))
-    (t `(prove% (list ',(car expr)
-                      ,@(mapcar #'form (cdr expr)))
-                ,binds))))
+    (and (gen-and (cdr expr) binds))
+    (or (gen-or (cdr expr) binds))
+    (not (gen-not (cadr expr) binds))
+    (t `(prove (list ',(car expr)
+                     ,@(mapcar #'form (cdr expr)))
+               ,binds))))
 
-(defun gen-and% (clauses binds)
+(defun gen-and (clauses binds)
   (if (null clauses)
       `(=values ,binds)
       (let ((gb (gensym)))
-        `(=bind (,gb) ,(gen-query% (car clauses) binds)
-           ,(gen-and% (cdr clauses) gb)))))
+        `(=bind (,gb) ,(gen-query (car clauses) binds)
+           ,(gen-and (cdr clauses) gb)))))
 
-(defun gen-or% (clauses binds)
+(defun gen-or (clauses binds)
   `(choose
-    ,@(mapcar #'(lambda (c) (gen-query% c binds))
+    ,@(mapcar #'(lambda (c) (gen-query c binds))
               clauses)))
 
-(defun gen-not% (clauses binds)
+(defun gen-not (clauses binds)
   (let ((gpaths (gensym)))
     `(let ((,gpaths *paths*))
        (setq *paths* nil)
-       (choose (=bind (b) ,(gen-query% expr binds)
+       (choose (=bind (b) ,(gen-query expr binds)
                  (setq *paths* ,gpaths)
                  (fail))
                (progn
                  (setq *paths* ,gpaths)
                  (=values ,binds))))))
 
-(=defun prove% (query binds)
+(=defun prove (query binds)
   (choose-bind r *rules* (=funcall r query binds)))
-
-
 
 ;; from the notes
 #+nil
@@ -241,19 +209,60 @@
     `(length (conc1f *rules*
                      ,(rule-fn (rep_ ant) (rep_ con))))))
 
-(defun rule-fn% (ant con)
+(defun rule-fn (ant con)
   (with-gensyms (val win fact binds)
     `(=lambda (,fact ,binds)
        (with-gensyms ,(vars-in (list ant con) #'simple?)
          (multiple-value-bind
                (,val ,win)
-             (compiled-match ,fact
-                             (list ',(car con)
-                                   ,@(mapcar #'form (cdr con)))
-                             ,binds)
+             (match ,fact
+               (list ',(car con)
+                     ,@(mapcar #'form (cdr con)))
+               ,binds)
            (if ,win
-               ,(gen-query% ant val)
+               ,(gen-query ant val)
                (fail)))))))
+
+;;####################################
+(in-package :on-lisp.24.compiled-plus)
+
+(defun rep_ (x)
+  (if (atom x)
+      (if (eq x '_) (gensym "?") x)
+      (cons (rep_ (car x)) (rep_ (cdr x)))))
+
+(defun form (pat)
+  (if (simple? pat)
+      pat
+      `(cons ,(form (car pat)) ,(form (cdr pat)))))
+
+(defun fullbind (x b)
+  (cond ((gensym? x) (aif2 (binding x b)
+                           (fullbind it b)
+                           (gensym)))
+        ((atom x) x)
+        (t (cons (fullbind (car x) b)
+                 (fullbind (cdr x) b)))))
+
+(defvar *rules* nil)
+
+(defun match (x y &optional binds)
+  (acond2
+   ((or (eql x y) (eql x '_) (eql y '_)) (values binds t))
+   ((binding x binds) (match it y binds))
+   ((binding y binds) (match x it binds))
+   ((gensym? x) (values (cons (cons x y) binds) t))
+   ((gensym? y) (values (cons (cons y x) binds) t))
+   ((and (consp x) (consp y) (match (car x) (car y) binds))
+    (match (cdr x) (cdr y) it))
+   (t (values nil nil))))
+
+(defmacro <- (con &rest ant)
+  (let ((ant (if (= (length ant) 1)
+                 (car ant)
+                 `(and ,@ant))))
+    `(length (conc1f *rules*
+                     ,(rule-fn (rep_ ant) (rep_ con))))))
 
 ;; p. 340
 
@@ -263,10 +272,10 @@
        (with-gensyms ,(vars-in (list ant con) #'simple?)
          (multiple-value-bind
                (,val ,win)
-             (compiled-match ,fact
-                             (list ',(car con)
-                                   ,@(mapcar #'form (cdr con)))
-                             ,binds)
+             (match ,fact
+               (list ',(car con)
+                     ,@(mapcar #'form (cdr con)))
+               ,binds)
            (if ,win
                ,(gen-query ant val paths)
                (fail)))))))
@@ -278,7 +287,7 @@
        (setq *paths* nil)
        (=bind (,gb) ,(gen-query (rep_ query) nil '*paths*)
          (let ,(mapcar (lambda (v)
-                         `(,v (compiled-fullbind ,v ,gb)))
+                         `(,v (fullbind ,v ,gb)))
                        vars)
            ,@body)
          (fail)))))
@@ -326,7 +335,7 @@
                  (=values ,binds))))))
 
 (defmacro with-binds (binds expr)
-  `(let ,(mapcar #'(lambda (v) `(,v (compiled-fullbind ,v ,binds)))
+  `(let ,(mapcar #'(lambda (v) `(,v (fullbind ,v ,binds)))
                  (vars-in expr))
      ,expr))
 
@@ -336,6 +345,6 @@
        (fail)))
 
 (defun gen-is (expr1 expr2 binds)
-  `(aif2 (compiled-match ,expr1 (with-binds ,binds ,expr2) ,binds)
+  `(aif2 (match ,expr1 (with-binds ,binds ,expr2) ,binds)
          (=values it)
          (fail)))

@@ -1,6 +1,5 @@
-(defpackage #:on-lisp-test
-  (:use :cl :stefil :lisp-unit
-        :named-readtables
+(defpackage :on-lisp-test
+  (:use :cl :stefil :lisp-unit :named-readtables
         :on-lisp.02
         :on-lisp.03
         :on-lisp.04
@@ -22,10 +21,51 @@
         :on-lisp.20
         :on-lisp.21
         :on-lisp.22
-        :on-lisp.23
-        :on-lisp.24
-        :on-lisp.25
-        )
+        :on-lisp.23)
+  (:export
+   #:run-all-tests))
+
+(defpackage :on-lisp.24.interpreted.test
+  (:use :cl :stefil :lisp-unit :named-readtables
+        :on-lisp.24.interpreted)
+  (:import-from :on-lisp.18
+                :gensym?)
+  (:export
+   #:run-all-tests))
+
+(defpackage :on-lisp.24.compiled.test
+  (:use :cl :stefil :lisp-unit :named-readtables
+        :on-lisp.24.compiled)
+  (:export
+   #:run-all-tests))
+
+(defpackage :on-lisp.24.compiled-plus.test
+  (:use :cl :stefil :lisp-unit :named-readtables
+        :on-lisp.24.compiled-plus)
+  (:export
+   #:run-all-tests))
+
+(defpackage :on-lisp.25.v1.test
+  (:use :cl :stefil :lisp-unit :named-readtables
+        :on-lisp.25.v1)
+  (:export
+   #:run-all-tests))
+
+(defpackage :on-lisp.25.v2.test
+  (:use :cl :stefil :lisp-unit :named-readtables
+        :on-lisp.25.v2)
+  (:export
+   #:run-all-tests))
+
+(defpackage :on-lisp.25.v3.test
+  (:use :cl :stefil :lisp-unit :named-readtables
+        :on-lisp.25.v3)
+  (:export
+   #:run-all-tests))
+
+(defpackage :on-lisp.25.v4.test
+  (:use :cl :stefil :lisp-unit :named-readtables
+        :on-lisp.25.v4)
   (:export
    #:run-all-tests))
 

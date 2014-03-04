@@ -65,4 +65,8 @@
   :components
   ((:module :test
             :components ((:file "package")
-                         (:file "on-lisp-test" :depends-on ("package"))))))
+                         (:file "chapter-24-test" :depends-on ("package"))
+                         (:file "chapter-25-test" :depends-on ("package"))
+                         (:file "on-lisp-test" :depends-on ("package"
+                                                            "chapter-24-test"
+                                                            "chapter-25-test"))))))

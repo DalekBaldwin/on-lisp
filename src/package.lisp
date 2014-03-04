@@ -446,10 +446,41 @@
    #:with-parses
    #:parse))
 
-(defpackage :on-lisp.24
+(defpackage :on-lisp.24.interpreted
   (:use :cl)
   (:import-from :on-lisp.04
                 :symb)
+  (:import-from :on-lisp.12
+                :conc1f)
+  (:import-from :on-lisp.14
+                :it
+                :aif2)
+  (:import-from :on-lisp.18
+                :match
+                :varsym?
+                :binding
+                :vars-in
+                :_
+                )
+  (:import-from :on-lisp.20
+                :=defuns
+                :=bind
+                :=values
+                )
+  (:import-from :on-lisp.22
+                :*paths*
+                :choose-bind
+                :fail
+                )
+  (:export
+   #:with-inference
+   #:fullbind
+   #:<-
+   #:_
+   ))
+
+(defpackage :on-lisp.24.compiled
+  (:use :cl)
   (:import-from :on-lisp.11
                 :with-gensyms)
   (:import-from :on-lisp.12
@@ -459,7 +490,41 @@
                 :acond2
                 :aif2)
   (:import-from :on-lisp.18
-                :match
+                :binding
+                :vars-in
+                :simple?
+                :_
+                :gensym?
+                )
+  (:import-from :on-lisp.20
+                :=lambda
+                :=defun
+                :=bind
+                :=values
+                :=funcall
+                )
+  (:import-from :on-lisp.22
+                :*paths*
+                :choose-bind
+                :fail
+                )
+  (:export
+   #:with-inference
+   #:<-
+   #:_
+   ))
+
+(defpackage :on-lisp.24.compiled-plus
+  (:use :cl)
+  (:import-from :on-lisp.11
+                :with-gensyms)
+  (:import-from :on-lisp.12
+                :conc1f)
+  (:import-from :on-lisp.14
+                :it
+                :acond2
+                :aif2)
+  (:import-from :on-lisp.18
                 :varsym?
                 :binding
                 :vars-in
@@ -483,44 +548,48 @@
                 :fail
                 )
   (:export
-   #:with-inference%
-   #:rep_
-   #:fullbind
-   #:prove-query
-   #:prove-and
-   #:prove-or
-   #:prove-not
-   #:prove-simple
-   ;;#:*rlist*
-   #:<-%
-   #:with-inference%%
-   ;;#:*rules*
-   #:<-
    #:with-inference
+   #:<-
+   #:_
+   #:lisp
    #:cut
    ))
 
-(defpackage :on-lisp.25
+(defpackage :on-lisp.25.v1
+  (:use :cl)
+  (:export
+   #:rget
+   #:parents))
+
+(defpackage :on-lisp.25.v2
+  (:use :cl)
+  (:export
+   #:obj
+   #:defprop))
+
+(defpackage :on-lisp.25.v3
   (:use :cl)
   (:import-from :on-lisp.04
                 :symb)
   (:export
-   #:rget%
-   ;;#:get-ancestors
-   #:parents
-   ;;#:some2
+   #:defprop
    #:obj
-   ;;#:ancestors
-   ;;#:rget%%
-   #:defprop%
+   #:defmeth
+   #:meth-around
+   #:meth-before
+   #:meth-primary
+   #:meth-after))
+
+(defpackage :on-lisp.25.v4
+  (:use :cl)
+  (:import-from :on-lisp.04
+                :symb)
+  (:export
+   #:defprop
+   #:obj
+   #:defmeth
    #:meth-around
    #:meth-before
    #:meth-primary
    #:meth-after
-   #:defprop
-   #:rget
-   ;;#:run-methods
-   #:defmeth
-   #:call-next
-   #:undefmeth
-   ))
+   #:defcomb))
