@@ -615,3 +615,33 @@
    #:meth-primary
    #:meth-after
    #:defcomb))
+
+(defpackage on-lisp
+  (:use cl)
+  (:import-from cl-reexport
+                reexport-from)
+  (:import-from on-lisp.04
+                mapa-b
+                symb))
+(in-package on-lisp)
+
+(defmacro reexport-from-all-chapters ()
+  `(progn
+     ,@(mapa-b (lambda (i)
+               `(reexport-from ',(symb 'on-lisp.
+                                       (if (< i 10)
+                                           (symb 0 i)
+                                           i))))
+               2 25)))
+
+(reexport-from-all-chapters)
+
+(reexport-from 'on-lisp.19.interpreted)
+(reexport-from 'on-lisp.19.compiled)
+(reexport-from 'on-lisp.24.interpreted)
+(reexport-from 'on-lisp.24.compiled)
+(reexport-from 'on-lisp.24.compiled-plus)
+(reexport-from 'on-lisp.25.v1)
+(reexport-from 'on-lisp.25.v2)
+(reexport-from 'on-lisp.25.v3)
+(reexport-from 'on-lisp.25.v4)

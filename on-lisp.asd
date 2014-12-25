@@ -58,7 +58,7 @@
                                               "chapter-22"))
              (:file "chapter-25" :depends-on ("package"
                                               "chapter-04")))))
-  :depends-on ())
+  :depends-on (cl-reexport))
 
 (defsystem :on-lisp-test
   :depends-on (:on-lisp :stefil :lisp-unit :named-readtables)
