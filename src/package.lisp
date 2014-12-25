@@ -626,22 +626,26 @@
 (in-package on-lisp)
 
 (defmacro reexport-from-all-chapters ()
-  `(progn
-     ,@(mapa-b (lambda (i)
-               `(reexport-from ',(symb 'on-lisp.
-                                       (if (< i 10)
-                                           (symb 0 i)
-                                           i))))
-               2 25)))
+  (flet ((generate-package-names (from upto)
+           (mapa-b (lambda (i)
+                     `(reexport-from ',(symb 'on-lisp.
+                                             (if (< i 10)
+                                                 (symb 0 i)
+                                                 i))))
+                   from upto)))
+   `(progn
+      ,@(generate-package-names 2 18)
+      ,@(generate-package-names 20 23))))
 
 (reexport-from-all-chapters)
 
-(reexport-from 'on-lisp.19.interpreted)
-(reexport-from 'on-lisp.19.compiled)
-(reexport-from 'on-lisp.24.interpreted)
-(reexport-from 'on-lisp.24.compiled)
-(reexport-from 'on-lisp.24.compiled-plus)
-(reexport-from 'on-lisp.25.v1)
-(reexport-from 'on-lisp.25.v2)
-(reexport-from 'on-lisp.25.v3)
-(reexport-from 'on-lisp.25.v4)
+;; packages with the same symbol
+;; (reexport-from 'on-lisp.19.interpreted)
+;; (reexport-from 'on-lisp.19.compiled)
+;; (reexport-from 'on-lisp.24.interpreted)
+;; (reexport-from 'on-lisp.24.compiled)
+;; (reexport-from 'on-lisp.24.compiled-plus)
+;; (reexport-from 'on-lisp.25.v1)
+;; (reexport-from 'on-lisp.25.v2)
+;; (reexport-from 'on-lisp.25.v3)
+;; (reexport-from 'on-lisp.25.v4)
