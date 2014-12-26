@@ -616,14 +616,14 @@
    #:meth-after
    #:defcomb))
 
-(defpackage on-lisp
-  (:use cl)
-  (:import-from cl-reexport
-                reexport-from)
-  (:import-from on-lisp.04
-                mapa-b
-                symb))
-(in-package on-lisp)
+(defpackage :on-lisp
+  (:use :cl)
+  (:import-from :cl-reexport
+                :reexport-from)
+  (:import-from :on-lisp.04
+                :mapa-b
+                :symb))
+(in-package :on-lisp)
 
 (defmacro reexport-from-all-chapters ()
   (flet ((generate-package-names (from upto)
@@ -639,7 +639,7 @@
 
 (reexport-from-all-chapters)
 
-;; packages with the same symbol
+;; packages with the same symbol:
 ;; (reexport-from 'on-lisp.19.interpreted)
 ;; (reexport-from 'on-lisp.19.compiled)
 ;; (reexport-from 'on-lisp.24.interpreted)
