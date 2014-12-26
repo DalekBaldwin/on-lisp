@@ -616,23 +616,24 @@
    #:meth-after
    #:defcomb))
 
-(defpackage :on-lisp
-  (:use :cl)
-  (:import-from :cl-reexport
-                :reexport-from)
-  (:import-from :on-lisp.04
-                :mapa-b
-                :symb))
-(in-package :on-lisp)
+(defpackage on-lisp
+  (:use cl)
+  (:import-from cl-reexport
+                reexport-from))
+(in-package on-lisp)
 
 (defmacro reexport-from-all-chapters ()
-  (flet ((generate-package-names (from upto)
-           (mapa-b (lambda (i)
-                     `(reexport-from ',(symb 'on-lisp.
-                                             (if (< i 10)
-                                                 (symb 0 i)
-                                                 i))))
-                   from upto)))
+  (labels ((mksymb (&rest args)
+             (intern (with-output-to-string (s)
+                       (dolist (a args)
+                         (princ a s)))))
+           (generate-package-names (from upto)
+             (mapcar (lambda (i)
+                       `(reexport-from ',(mksymb 'on-lisp.
+                                                 (if (< i 10)
+                                                     (mksymb 0 i)
+                                                     i))))
+                     (loop :for x :from from :upto upto :collect x))))
    `(progn
       ,@(generate-package-names 2 18)
       ,@(generate-package-names 20 23))))
