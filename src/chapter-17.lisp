@@ -17,15 +17,24 @@
   `(quote ,obj))
 
 ;; p. 226
+#+nil
 (set-dispatch-macro-character #\# #\?
   (lambda (stream char1 char2)
     (declare (ignore char1 char2))
     `(lambda (&rest ,(gensym))
        ,(read stream t nil t))))
 
+;;; Changed from anonymous lambda to |#?-reader| to support named-readtables
+(defun |#?-reader| (stream char numarg)
+  (declare (ignore char numarg))
+  `(lambda (&rest ,(gensym))
+     ,(read stream t nil t)))
+
 ;; p. 227
+#+nil
 (set-macro-character #\] (get-macro-character #\)))
 
+#+nil
 (set-dispatch-macro-character #\# #\[
   (lambda (stream char1 char2)
     (declare (ignore char1 char2))
@@ -35,6 +44,16 @@
           ((> i (floor (cadr pair)))
            (list 'quote (nreverse accum)))
         (push i accum)))))
+
+;;; Changed from anonymous lambda to |#[-reader| to support named-readtables
+(defun |#[-reader| (stream char numarg)
+  (declare (ignore char numarg))
+  (let ((accum nil)
+        (pair (read-delimited-list #\] stream t)))
+    (do ((i (ceiling (car pair)) (1+ i)))
+        ((> i (floor (cadr pair)))
+         (list 'quote (nreverse accum)))
+      (push i accum))))
 
 ;; p. 228
 (defmacro defdelim (left right parms &body body)
@@ -54,5 +73,22 @@
   (list 'quote (mapa-b #'identity (ceiling x) (floor y))))
 
 ;; p. 229
+#+nil
 (defdelim #\{ #\} (&rest args)
   `(fn (compose ,@args)))
+
+;;; Changed from anonymous lambda to |#[-reader| to support named-readtables
+(defun |#{-reader| (stream char numarg)
+  (declare (ignore char numarg))
+  `(fn (compose ,@(read-delimited-list #\} stream t))))
+
+(flet ((rpar (str char)
+         (declare (ignore str char))
+         (get-macro-character #\) )))
+  (defreadtable read-macros
+    (:merge :standard)
+    (:macro-char #\] #'rpar)
+    (:macro-char #\} #'rpar)
+    (:dispatch-macro-char #\# #\? #'|#?-reader|)
+    (:dispatch-macro-char #\# #\[ #'|#[-reader|)
+    (:dispatch-macro-char #\# #\{ #'|#{-reader|)))

@@ -286,9 +286,12 @@
 
 (defpackage :on-lisp.17
   (:use :cl)
+  (:import-from :named-readtables
+                :defreadtable)
   (:export
    #:defdelim
    #:ddfn
+   #:read-macros
    ))
 
 (defpackage :on-lisp.18
