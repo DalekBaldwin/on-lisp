@@ -119,10 +119,14 @@
            ,@body)
          (fail)))))
 
-;; As in if-match or with-answer, pattern variables are initially bound to
-;; gensyms to indicate that they haven't yet been assigned real values by
-;; matching. Thus the function varsym?, which match and fullbind use to detect
-;; variables, has to be changed to look for gensyms.
+;; Here the book says: "As in if-match or with-answer, pattern variables are
+;; initially bound to gensyms to indicate that they haven't yet been assigned
+;; real values by matching. Thus the function varsym?, which match and fullbind
+;; use to detect variables, has to be changed to look for gensyms."
+;; Since this new `varsym?` is the same as `gensym?` from chapter 18, instead
+;; I have created new internal definitions for `match` and `fullbind` which use
+;; `gensym?` so that each version of the Prolog engine can still live in a
+;; separate working package.
 
 #+nil
 (defun varsym? (x) ;; same definition as `gensym?`
