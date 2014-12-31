@@ -651,7 +651,9 @@
     `(defpackage :on-lisp
        (:use :cl ,@packages)
        (:export
-        ,@(loop for package in packages
-             appending
-               (loop for sym being the external-symbols of package
-                  collect sym)))))
+        ,@(remove-duplicates
+           (loop for package in packages
+              appending
+                (loop for sym being the external-symbols of package
+                   collect sym))
+           :from-end t))))
