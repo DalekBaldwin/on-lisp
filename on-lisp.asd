@@ -25,12 +25,18 @@
              (:file "chapter-12" :depends-on ("package"
                                               "chapter-11"))
              (:file "chapter-13" :depends-on ("package"
+                                              "chapter-04"
                                               "chapter-11"))
              (:file "chapter-14" :depends-on ("package"))
-             (:file "chapter-15" :depends-on ("package"))
+             (:file "chapter-15" :depends-on ("package"
+                                              "chapter-05"))
              (:file "chapter-16" :depends-on ("package"
+                                              "chapter-04"
+                                              "chapter-12"
                                               "chapter-14"))
-             (:file "chapter-17" :depends-on ("package"))
+             (:file "chapter-17" :depends-on ("package"
+                                              "chapter-05"
+                                              "chapter-15"))
              (:file "chapter-18" :depends-on ("package"
                                               "chapter-04"
                                               "chapter-11"
