@@ -85,33 +85,9 @@
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (unless (find-readtable :on-lisp-test)
     (defreadtable :on-lisp-test
-      (:merge :standard)
-      ;; p. 226
-      (:dispatch-macro-char #\# #\?
-                            (lambda (stream char1 char2)
-                              (declare (ignore char1 char2))
-                              `(lambda (&rest ,(gensym))
-                                 ,(read stream t nil t))))
-      ;; p. 227
-      (:macro-char #\] (get-macro-character #\)))
-      (:dispatch-macro-char #\# #\[
-                            (lambda (stream char1 char2)
-                              (declare (ignore char1 char2))
-                              (let ((accum nil)
-                                    (pair (read-delimited-list #\] stream t)))
-                                (do ((i (ceiling (car pair)) (1+ i)))
-                                    ((> i (floor (cadr pair)))
-                                     (list 'quote (nreverse accum)))
-                                  (push i accum)))))
+      (:merge :on-lisp.17)
       
-      ;; the rest of the read-macros are for convenience, not defined in the book
-      (:dispatch-macro-char #\# #\!
-                            ;; ignore entire expression, good for commenting out
-                            ;; multi-line s-expression
-                            (lambda (stream subchar arg)
-                              (declare (ignore subchar arg))
-                              (read stream t nil t)
-                              (values)))
+      ;; extra read-macro for convenience, not defined in the book
       (:dispatch-macro-char #\# #\`
                             ;; copy-tree, for when it's natural to express a list
                             ;; as a quoted form but you  can't risk someone else
