@@ -329,10 +329,14 @@
   (is (eq (funcall #?'a) 'a))
   (is (eq (funcall #?#'oddp) (symbol-function 'oddp))))
 
-
 (deftest test-sharp-brackets ()
   (is (equal #[2 7]
              #`(2 3 4 5 6 7))))
+
+;; p. 229
+(deftest test-sharp-braces ()
+  (is (equal (funcall #{list 1+} 7)
+             #`(8))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Chapter 18 - Destructuring
