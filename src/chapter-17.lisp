@@ -85,7 +85,7 @@
 (flet ((rpar (str char)
          (declare (ignore str char))
          (get-macro-character #\) )))
-  (defreadtable read-macros
+  (defreadtable :on-lisp.17
     (:merge :standard)
     (:macro-char #\] #'rpar)
     (:macro-char #\} #'rpar)

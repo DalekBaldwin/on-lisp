@@ -226,6 +226,7 @@
 (defpackage :on-lisp.15
   (:use :cl)
   (:import-from :on-lisp.05
+                :compose
                 :lrec
                 :trec)
   (:export
@@ -288,10 +289,13 @@
   (:use :cl)
   (:import-from :named-readtables
                 :defreadtable)
+  (:import-from :on-lisp.05
+                :compose)
+  (:import-from :on-lisp.15
+                :fn)
   (:export
    #:defdelim
    #:ddfn
-   #:read-macros
    ))
 
 (defpackage :on-lisp.18
