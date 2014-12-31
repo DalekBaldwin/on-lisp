@@ -619,37 +619,35 @@
    #:meth-after
    #:defcomb))
 
-(defpackage on-lisp
-  (:use cl)
-  (:import-from cl-reexport
-                reexport-from))
-(in-package on-lisp)
-
-(defmacro reexport-from-all-chapters ()
-  (labels ((mksymb (&rest args)
-             (intern (with-output-to-string (s)
-                       (dolist (a args)
-                         (princ a s)))))
-           (generate-package-names (from upto)
-             (mapcar (lambda (i)
-                       `(reexport-from ',(mksymb 'on-lisp.
-                                                 (if (< i 10)
-                                                     (mksymb 0 i)
-                                                     i))))
-                     (loop :for x :from from :upto upto :collect x))))
-   `(progn
-      ,@(generate-package-names 2 18)
-      ,@(generate-package-names 20 23))))
-
-(reexport-from-all-chapters)
-
-;; packages with the same symbol:
-;; (reexport-from 'on-lisp.19.interpreted)
-;; (reexport-from 'on-lisp.19.compiled)
-;; (reexport-from 'on-lisp.24.interpreted)
-;; (reexport-from 'on-lisp.24.compiled)
-;; (reexport-from 'on-lisp.24.compiled-plus)
-;; (reexport-from 'on-lisp.25.v1)
-;; (reexport-from 'on-lisp.25.v2)
-;; (reexport-from 'on-lisp.25.v3)
-;; (reexport-from 'on-lisp.25.v4)
+#.(let ((packages
+         (list :on-lisp.02
+               :on-lisp.03
+               :on-lisp.04
+               :on-lisp.05
+               :on-lisp.06
+               :on-lisp.07
+               :on-lisp.08
+               :on-lisp.09
+               :on-lisp.10
+               :on-lisp.11
+               :on-lisp.12
+               :on-lisp.13
+               :on-lisp.14
+               :on-lisp.15
+               :on-lisp.16
+               :on-lisp.17
+               :on-lisp.18
+               :on-lisp.19.compiled
+               :on-lisp.20
+               :on-lisp.21
+               :on-lisp.22
+               :on-lisp.23
+               :on-lisp.24.compiled-plus
+               :on-lisp.25.v4)))
+    `(defpackage :on-lisp
+       (:use :cl ,@packages)
+       (:export
+        ,@(loop for package in packages
+             appending
+               (loop for sym being the external-symbols of package
+                  collect sym)))))
