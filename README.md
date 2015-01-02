@@ -1,4 +1,14 @@
-This is my personal working-through of the book. I've incorporated some fixes to the code by looking at [pg's errata](http://www.paulgraham.com/onlisperrata.html), poring over decade-old mailing list archives, pestering the lovable fellas on #lisp, and hitting the code with a hammer until it works. Most of the example code executions from the book have been converted into stefil and lisp-unit tests by hitting them with a hammer until they work.
+This repository contains a version of the code from On Lisp modified for use in modern Lisp environments. Paul Graham's original code can be found [here](http://ep.yimg.com/ty/cdn/paulgraham/onlisp.lisp).
+
+Among other necessary changes, this version:
+
+- Updates code that relied on pre-ANSI built-ins
+- Includes the bug fixes mentioned on pg's [errata page](http://www.paulgraham.com/onlisperrata.html)
+- Organizes everything into a modern system structure with ASDF and named-readtables
+- Adapts most of the example code into test suites
+- Makes it easy to load each version of the query system, Prolog system, and OOP system separately
+
+It was written to follow along with the book page by page and catalogue dependencies between the chapters, which become quite complex toward the end.
 
 The PDF file of the book available from Paul Graham's site isn't so great for reading on a screen. A version with smaller margins and the missing figures re-added can be found [here](http://www.lurklurk.org/onlisp/onlisp.html). Figure 20.2 is missing a line between 2 and 3.
 
