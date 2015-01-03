@@ -143,7 +143,6 @@
        #`(z p n))))
 
 ;; p. 163
-#+sbcl
 (define-test test-mvdo
   (assert-expands
    (LET (#:G2 #:G3 #:G4)
@@ -216,7 +215,6 @@
 ;;;; Chapter 13 - Computation at Compile-Time
 
 ;;p. 182
-#+sbcl
 (define-test test-most-of
   (assert-expands
    (LET ((#:G1 0))
@@ -225,7 +223,6 @@
    (most-of (a) (b) (c))))
 
 ;; p. 185
-#+sbcl
 (define-test test-nthmost
   (assert-expands
    (LET ((#:G1 NUMS))
@@ -359,7 +356,6 @@
 (defmacro destruc-macro (pat seq)
   (destruc pat seq))
 
-#+sbcl
 (define-test test-destruc-expand
   (assert-expands
    ((A (ELT SEQ 0))
@@ -372,7 +368,6 @@
 (defmacro dbind-ex-macro (binds body)
   (dbind-ex binds body))
 
-#+sbcl
 (define-test test-dbind-ex-expand
   (assert-expands
    (LET ((A (ELT SEQ 0))

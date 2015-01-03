@@ -209,7 +209,6 @@ T ")))
    (blarf)))
 
 ;; p. 337
-#+sbcl
 (define-test test-with-inference-expand
   (assert-expands
    (WITH-GENSYMS (?X)
