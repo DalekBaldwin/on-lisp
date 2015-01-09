@@ -2,15 +2,15 @@ language: common-lisp
 
 env:
   matrix:
-#    - LISP=abcl
-#    - LISP=allegro
+#    - LISP=abcl # Out of memory PermGen space
+#    - LISP=allegro # This request cannot be satisfied because you have hit the Allegro CL Free Express heap limit.
     - LISP=sbcl
     - LISP=sbcl32
     - LISP=ccl
     - LISP=ccl32
-    - LISP=clisp
-    - LISP=clisp32
-    - LISP=cmucl
+#    - LISP=clisp # SYSTEM::%FIND-PACKAGE: There is no package with name "LISP-UNIT2"
+#    - LISP=clisp32 # SYSTEM::%FIND-PACKAGE: There is no package with name "LISP-UNIT2"
+#    - LISP=cmucl # /home/travis/.cim/bin/cl: 4: .: Can't open /home/travis/.cim/config/current.3271
     - LISP=ecl
 
 install:
