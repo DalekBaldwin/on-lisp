@@ -16,12 +16,6 @@
          (run-tests :package :on-lisp.24.interpreted.test
                     :run-contexts #'with-summary-context)))))
 
-(define-test test-blah ()
-  ;; need to have at least one lisp-unit test to not barf in REPL
-  (assert-expands
-   (blarf)
-   (blarf)))
-
 ;; p. 325
 (deftest test-fullbind ()
   (let ((b #`((?x . (?y . ?z)) (?y . foo) (?z . nil))))
@@ -200,12 +194,6 @@ T ")))
          (run-tests :package :on-lisp.24.compiled.test
                     :run-contexts #'with-summary-context)))))
 
-(define-test test-blah ()
-  ;; need to have at least one lisp-unit test to not barf in REPL
-  (assert-expands
-   (blarf)
-   (blarf)))
-
 ;; p. 337
 (define-test test-with-inference-expand ()
   (assert-expands
@@ -236,12 +224,6 @@ T ")))
   (let ((results
          (run-tests :package :on-lisp.24.compiled-plus.test
                     :run-contexts #'with-summary-context)))))
-
-(define-test test-blah ()
-  ;; need to have at least one lisp-unit test to not barf in REPL
-  (assert-expands
-   (blarf)
-   (blarf)))
 
 ;; p. 342
 (deftest test-with-inference-compiled-plus ()

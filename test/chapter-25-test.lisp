@@ -16,11 +16,6 @@
          (run-tests :package :on-lisp.25.v1.test
                     :run-contexts #'with-summary-context)))))
 
-(define-test test-blah ()
-  (assert-expands
-   (blarf)
-   (blarf)))
-
 ;; p. 352
 (deftest test-rget ()
   (let ((scoundrel (make-hash-table))
@@ -46,11 +41,6 @@
   (let ((results
          (run-tests :package :on-lisp.25.v2.test
                     :run-contexts #'with-summary-context)))))
-
-(define-test test-blah ()
-  (assert-expands
-   (blarf)
-   (blarf)))
 
 ;; p. 354
 (progn
@@ -78,11 +68,6 @@
   (let ((results
          (run-tests :package :on-lisp.25.v3.test
                     :run-contexts #'with-summary-context)))))
-
-(define-test test-blah ()
-  (assert-expands
-   (blarf)
-   (blarf)))
 
 ;; p. 357
 (progn
@@ -134,11 +119,6 @@ Well, that was easy.
   (let ((results
          (run-tests :package :on-lisp.25.v4.test
                     :run-contexts #'with-summary-context)))))
-
-(define-test test-blah ()
-  (assert-expands
-   (blarf)
-   (blarf)))
 
 ;; p. 360
 #+nil

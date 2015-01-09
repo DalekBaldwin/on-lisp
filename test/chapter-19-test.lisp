@@ -16,12 +16,6 @@
          (run-tests :package :on-lisp.19.interpreted.test
                     :run-contexts #'with-summary-context)))))
 
-(define-test test-blah ()
-  ;; need to have at least one lisp-unit test to not barf in REPL
-  (assert-expands
-   (blarf)
-   (blarf)))
-
 ;; p. 252
 (clear-db)
 (fact painter hogarth william english)
@@ -79,12 +73,6 @@
   (let ((results
          (run-tests :package :on-lisp.19.compiled.test
                     :run-contexts #'with-summary-context)))))
-
-(define-test test-blah ()
-  ;; need to have at least one lisp-unit test to not barf in REPL
-  (assert-expands
-   (blarf)
-   (blarf)))
 
 (clear-db)
 (fact painter hogarth william english)

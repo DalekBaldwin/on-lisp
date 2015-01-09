@@ -21,12 +21,6 @@
   (on-lisp.25.v3.test::run-all-tests)
   (on-lisp.25.v4.test::run-all-tests))
 
-(define-test test-blah ()
-  ;; need to have at least one lisp-unit test to not barf in REPL
-  (assert-expands
-   (blarf)
-   (blarf)))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Chapter 4 - Utility Functions
 
