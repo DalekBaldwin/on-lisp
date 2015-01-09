@@ -158,7 +158,11 @@ Well, that was easy.
 
 (deftest test-orange ()
   (defcomb props (lambda (&rest args) (reduce #'union args)))
-  (is (equal (props my-orange)
-             #`(dented orange sweet round acidic)))
+  ;; Implementations differ in ordering of results of `union`
+  (is (equal (sort (copy-list (props my-orange))
+                   (lambda (x y)
+                     (string-lessp (symbol-name x)
+                                   (symbol-name y))))
+             #`(acidic dented orange round sweet)))
   (defcomb props :standard)
   (is (equal (props my-orange) #`(dented))))

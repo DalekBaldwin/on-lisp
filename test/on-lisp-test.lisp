@@ -278,7 +278,7 @@
 ;; p. 206
 (deftest test-unions ()
   ;; Implementations differ in ordering of results of `union`
-  (is (equal (sort (unions #`(a b) #`(b c) #`(c d))
+  (is (equal (sort (copy-list (unions #`(a b) #`(b c) #`(c d)))
                    (lambda (x y)
                      (string-lessp (symbol-name x)
                                    (symbol-name y))))
