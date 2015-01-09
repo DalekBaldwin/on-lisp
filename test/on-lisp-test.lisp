@@ -277,9 +277,12 @@
 
 ;; p. 206
 (deftest test-unions ()
-  ;; ordering not predictable in general, but whatever
-  (is (equal (unions #`(a b) #`(b c) #`(c d))
-             #`(a d b c))))
+  ;; Implementations differ in ordering of results of `union`
+  (is (equal (sort (unions #`(a b) #`(b c) #`(c d))
+                   (lambda (x y)
+                     (string-lessp (symbol-name x)
+                                   (symbol-name y))))
+             #`(a b c d))))
 
 ;; p. 207
 (deftest test-differences ()
