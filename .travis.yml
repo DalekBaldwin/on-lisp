@@ -23,6 +23,7 @@ install:
 
 script:
   - cl -e '(in-package :cl-user)'
+       -e '(format t "~&~A~%" (asdf:asdf-version))'
        -e '(ql:quickload (list :on-lisp :on-lisp-test))'
        -e '(let ((*debugger-hook*
                   (lambda (c h)

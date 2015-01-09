@@ -381,8 +381,9 @@
     (body))))
 
 ;; p. 235
+
 (let ((ar (make-array #`(3 3))))
-  (deftest test-with-matrix ()
+  (deftest test-with-matrix/with-array ()
     (for (r 0 2)
       (for (c 0 2)
         (setf (aref ar r c) (+ (* r 10) c))))
@@ -390,8 +391,7 @@
                              (d e f)
                              (g h i)) ar
                  (list a b c d e f g h i))
-               #`(0 1 2 10 11 12 20 21 22))))
-  (deftest test-with-array ()
+               #`(0 1 2 10 11 12 20 21 22)))
     (is (equal (with-array ((a 0 0) (d 1 1) (i 2 2)) ar
                  (list a d i))
                #`(0 11 22)))))
