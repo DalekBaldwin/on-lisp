@@ -47,6 +47,14 @@
 (defpackage :on-lisp.24.compiled.test
   (:use :cl :stefil :lisp-unit2 :named-readtables
         :on-lisp.24.compiled)
+  (:import-from :on-lisp.11
+                :with-gensyms)
+  (:import-from :on-lisp.20
+                :=bind
+                :=values)
+  (:import-from :on-lisp.22
+                :*paths*
+                :fail)
   (:export
    #:run-all-tests))
 
