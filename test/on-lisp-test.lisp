@@ -400,8 +400,9 @@
                #`(0 11 22)))))
 
 ;; p. 236
+(defstruct visitor name title firm)
+
 (deftest test-with-struct ()
-  (defstruct visitor name title firm)
   (let ((theo
          (make-visitor :name "Theodebert"
                        :title 'king
