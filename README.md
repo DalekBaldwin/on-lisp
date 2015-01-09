@@ -15,3 +15,5 @@ It was written to follow along with the book page by page and catalogue dependen
 The PDF file of the book available from Paul Graham's site isn't so great for reading on a screen. A version with smaller margins and the missing figures re-added can be found [here](http://www.lurklurk.org/onlisp/onlisp.html). Figure 20.2 is missing a line between 2 and 3.
 
 An online HTML version of the book, minus graphical figures, can be found [here](http://dunsmor.com/lisp/onlisp/onlisp.html).
+
+If you're using CLISP, clone the ahead-of-Quicklisp version of [lisp-unit2](https://github.com/AccelerationNet/lisp-unit2) to load the test code.
