@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/DalekBaldwin/on-lisp.svg?branch=master)](https://travis-ci.org/DalekBaldwin/on-lisp)
+
 This repository contains a version of the code from On Lisp modified for use in modern Lisp environments. Paul Graham's original code can be found [here](http://ep.yimg.com/ty/cdn/paulgraham/onlisp.lisp).
 
 Among other necessary changes, this version:
