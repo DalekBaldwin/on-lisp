@@ -6,6 +6,8 @@
 
 (defsystem :on-lisp
   :name "on-lisp"
+  :author '("Paul Graham [original book and code: ep.yimg.com/ty/cdn/paulgraham/onlisp.lisp]"
+            "Kyle Littler [contemporization and accessibilization]")
   :components
   ((:static-file "on-lisp.asd")
    (:module :src
