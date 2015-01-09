@@ -8,6 +8,14 @@
   :name "on-lisp"
   :author '("Paul Graham [original book and code: ep.yimg.com/ty/cdn/paulgraham/onlisp.lisp]"
             "Kyle Littler [contemporization and accessibilization]")
+  :license "Original code:
+            This code is copyright 1993 by Paul Graham, but anyone who wants
+            to use the code in any nonprofit activity, or distribute free
+            verbatim copies (including this notice), is encouraged to do so.
+
+            Modified code:
+            As long as you tell people it's modified and link to
+            the original, that's fine.  --pg"
   :components
   ((:static-file "on-lisp.asd")
    (:module :src
