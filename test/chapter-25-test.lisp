@@ -13,11 +13,10 @@
   (format t "Testing chapter 25 object system version 1 |~%")
   (test-chapter-25-v1)
   (let ((results
-         (run-tests :all :on-lisp.25.v1.test)))
-    (print-errors results)
-    (print-failures results)))
+         (run-tests :package :on-lisp.25.v1.test
+                    :run-contexts #'with-summary-context)))))
 
-(define-test test-blah
+(define-test test-blah ()
   (assert-expands
    (blarf)
    (blarf)))
@@ -45,11 +44,10 @@
   (format t "Testing chapter 25 object system version 2 |~%")
   (test-chapter-25-v2)
   (let ((results
-         (run-tests :all :on-lisp.25.v2.test)))
-    (print-errors results)
-    (print-failures results)))
+         (run-tests :package :on-lisp.25.v2.test
+                    :run-contexts #'with-summary-context)))))
 
-(define-test test-blah
+(define-test test-blah ()
   (assert-expands
    (blarf)
    (blarf)))
@@ -78,11 +76,10 @@
   (format t "Testing chapter 25 object system version 3 |~%")
   (test-chapter-25-v3)
   (let ((results
-         (run-tests :all :on-lisp.25.v3.test)))
-    (print-errors results)
-    (print-failures results)))
+         (run-tests :package :on-lisp.25.v3.test
+                    :run-contexts #'with-summary-context)))))
 
-(define-test test-blah
+(define-test test-blah ()
   (assert-expands
    (blarf)
    (blarf)))
@@ -135,11 +132,10 @@ Well, that was easy.
   (format t "Testing chapter 25 object system version 4 |~%")
   (test-chapter-25-v4)
   (let ((results
-         (run-tests :all :on-lisp.25.v4.test)))
-    (print-errors results)
-    (print-failures results)))
+         (run-tests :package :on-lisp.25.v4.test
+                    :run-contexts #'with-summary-context)))))
 
-(define-test test-blah
+(define-test test-blah ()
   (assert-expands
    (blarf)
    (blarf)))

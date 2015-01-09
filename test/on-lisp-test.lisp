@@ -9,9 +9,8 @@
   (format t "Testing chapters 2-18, 20-23 |~%") ;; "|" needed to avoid screwing up colors in SLIME REPL
   (test-all)
   (let ((results
-         (run-tests :all :on-lisp-test)))
-    (print-errors results)
-    (print-failures results))
+         (run-tests :package :on-lisp-test
+                    :run-contexts #'with-summary-context))))
   (on-lisp.19.interpreted.test::run-all-tests)
   (on-lisp.19.compiled.test::run-all-tests)
   (on-lisp.24.interpreted.test::run-all-tests)
@@ -22,7 +21,7 @@
   (on-lisp.25.v3.test::run-all-tests)
   (on-lisp.25.v4.test::run-all-tests))
 
-(define-test test-blah
+(define-test test-blah ()
   ;; need to have at least one lisp-unit test to not barf in REPL
   (assert-expands
    (blarf)
@@ -143,7 +142,7 @@
        #`(z p n))))
 
 ;; p. 163
-(define-test test-mvdo
+(define-test test-mvdo ()
   (assert-expands
    (LET (#:G2 #:G3 #:G4)
      (MVPSETQ #:G2 1 (#:G3 #:G4) (VALUES 0 0))
@@ -215,7 +214,7 @@
 ;;;; Chapter 13 - Computation at Compile-Time
 
 ;;p. 182
-(define-test test-most-of
+(define-test test-most-of ()
   (assert-expands
    (LET ((#:G1 0))
      (OR (AND (A) (> (INCF #:G1) 1)) (AND (B) (> (INCF #:G1) 1))
@@ -223,7 +222,7 @@
    (most-of (a) (b) (c))))
 
 ;; p. 185
-(define-test test-nthmost
+(define-test test-nthmost ()
   (assert-expands
    (LET ((#:G1 NUMS))
      (UNLESS (< (LENGTH #:G1) 3)
@@ -356,7 +355,7 @@
 (defmacro destruc-macro (pat seq)
   (destruc pat seq))
 
-(define-test test-destruc-expand
+(define-test test-destruc-expand ()
   (assert-expands
    ((A (ELT SEQ 0))
     ((#:G1 (ELT SEQ 1))
@@ -368,7 +367,7 @@
 (defmacro dbind-ex-macro (binds body)
   (dbind-ex binds body))
 
-(define-test test-dbind-ex-expand
+(define-test test-dbind-ex-expand ()
   (assert-expands
    (LET ((A (ELT SEQ 0))
          (#:G1 (ELT SEQ 1))
@@ -651,7 +650,6 @@ Rebuilding ROME.
 ;;;; Chapter 23 - An ATN Compiler
 
 ;; p. 307
-
 (def-atn-nodes
   (s1
    (cat noun s2
@@ -795,7 +793,7 @@ Rebuilding ROME.
          (setr mood 'decl)
          (setr subj *))
    (cat v v
-        (setr mood 'imp) 
+        (setr mood 'imp)
         (setr subj '(np (pron you)))
         (setr aux nil)
         (setr v *)))

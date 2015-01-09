@@ -67,7 +67,7 @@
   :depends-on (:named-readtables))
 
 (defsystem :on-lisp-test
-  :depends-on (:on-lisp :stefil :lisp-unit :named-readtables)
+  :depends-on (:on-lisp :stefil :lisp-unit2 :named-readtables)
   :components
   ((:module :test
             :components ((:file "package")

@@ -13,11 +13,10 @@
   (format t "Testing chapter 24 interpreted Prolog |~%")
   (test-chapter-24-interpreted)
   (let ((results
-         (run-tests :all :on-lisp.24.interpreted.test)))
-    (print-errors results)
-    (print-failures results)))
+         (run-tests :package :on-lisp.24.interpreted.test
+                    :run-contexts #'with-summary-context)))))
 
-(define-test test-blah
+(define-test test-blah ()
   ;; need to have at least one lisp-unit test to not barf in REPL
   (assert-expands
    (blarf)
@@ -198,18 +197,17 @@ T ")))
   (format t "Testing chapter 24 compiled Prolog |~%")
   (test-chapter-24-compiled)
   (let ((results
-         (run-tests :all :on-lisp.24.compiled.test)))
-    (print-errors results)
-    (print-failures results)))
+         (run-tests :package :on-lisp.24.compiled.test
+                    :run-contexts #'with-summary-context)))))
 
-(define-test test-blah
+(define-test test-blah ()
   ;; need to have at least one lisp-unit test to not barf in REPL
   (assert-expands
    (blarf)
    (blarf)))
 
 ;; p. 337
-(define-test test-with-inference-expand
+(define-test test-with-inference-expand ()
   (assert-expands
    (WITH-GENSYMS (?X)
      (SETQ *PATHS* NIL)
@@ -236,11 +234,10 @@ T ")))
   (format t "Testing chapter 24 fancy compiled Prolog |~%")
   (test-chapter-24-compiled-plus)
   (let ((results
-         (run-tests :all :on-lisp.24.compiled-plus.test)))
-    (print-errors results)
-    (print-failures results)))
+         (run-tests :package :on-lisp.24.compiled-plus.test
+                    :run-contexts #'with-summary-context)))))
 
-(define-test test-blah
+(define-test test-blah ()
   ;; need to have at least one lisp-unit test to not barf in REPL
   (assert-expands
    (blarf)

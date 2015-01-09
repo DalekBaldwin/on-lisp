@@ -1,5 +1,5 @@
 (defpackage :on-lisp-test
-  (:use :cl :stefil :lisp-unit :named-readtables
+  (:use :cl :stefil :lisp-unit2 :named-readtables
         :on-lisp.02
         :on-lisp.03
         :on-lisp.04
@@ -25,19 +25,19 @@
    #:run-all-tests))
 
 (defpackage :on-lisp.19.interpreted.test
-  (:use :cl :stefil :lisp-unit :named-readtables
+  (:use :cl :stefil :lisp-unit2 :named-readtables
         :on-lisp.19.interpreted)
   (:export
    #:run-all-tests))
 
 (defpackage :on-lisp.19.compiled.test
-  (:use :cl :stefil :lisp-unit :named-readtables
+  (:use :cl :stefil :lisp-unit2 :named-readtables
         :on-lisp.19.compiled)
   (:export
    #:run-all-tests))
 
 (defpackage :on-lisp.24.interpreted.test
-  (:use :cl :stefil :lisp-unit :named-readtables
+  (:use :cl :stefil :lisp-unit2 :named-readtables
         :on-lisp.24.interpreted)
   (:import-from :on-lisp.18
                 :gensym?)
@@ -45,37 +45,37 @@
    #:run-all-tests))
 
 (defpackage :on-lisp.24.compiled.test
-  (:use :cl :stefil :lisp-unit :named-readtables
+  (:use :cl :stefil :lisp-unit2 :named-readtables
         :on-lisp.24.compiled)
   (:export
    #:run-all-tests))
 
 (defpackage :on-lisp.24.compiled-plus.test
-  (:use :cl :stefil :lisp-unit :named-readtables
+  (:use :cl :stefil :lisp-unit2 :named-readtables
         :on-lisp.24.compiled-plus)
   (:export
    #:run-all-tests))
 
 (defpackage :on-lisp.25.v1.test
-  (:use :cl :stefil :lisp-unit :named-readtables
+  (:use :cl :stefil :lisp-unit2 :named-readtables
         :on-lisp.25.v1)
   (:export
    #:run-all-tests))
 
 (defpackage :on-lisp.25.v2.test
-  (:use :cl :stefil :lisp-unit :named-readtables
+  (:use :cl :stefil :lisp-unit2 :named-readtables
         :on-lisp.25.v2)
   (:export
    #:run-all-tests))
 
 (defpackage :on-lisp.25.v3.test
-  (:use :cl :stefil :lisp-unit :named-readtables
+  (:use :cl :stefil :lisp-unit2 :named-readtables
         :on-lisp.25.v3)
   (:export
    #:run-all-tests))
 
 (defpackage :on-lisp.25.v4.test
-  (:use :cl :stefil :lisp-unit :named-readtables
+  (:use :cl :stefil :lisp-unit2 :named-readtables
         :on-lisp.25.v4)
   (:export
    #:run-all-tests))

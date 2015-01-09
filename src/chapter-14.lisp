@@ -101,7 +101,7 @@
 (let ((g (gensym)))
   (defun read2 (&optional (str *standard-input*))
     (let ((val (read str nil g)))
-      (unless (equal val g) (values val t))))) ;; should this be eq instead?
+      (unless (equal val g) (values val t))))) ;; should this be eql instead?
 
 (defmacro do-file (filename &body body)
   (let ((str (gensym)))

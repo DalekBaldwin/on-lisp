@@ -13,11 +13,10 @@
   (format t "Testing chapter 19 interpreted query system |~%")
   (test-chapter-19-interpreted)
   (let ((results
-         (run-tests :all :on-lisp.19.interpreted.test)))
-    (print-errors results)
-    (print-failures results)))
+         (run-tests :package :on-lisp.19.interpreted.test
+                    :run-contexts #'with-summary-context)))))
 
-(define-test test-blah
+(define-test test-blah ()
   ;; need to have at least one lisp-unit test to not barf in REPL
   (assert-expands
    (blarf)
@@ -78,11 +77,10 @@
   (format t "Testing chapter 19 compiled query system |~%")
   (test-chapter-19-compiled)
   (let ((results
-         (run-tests :all :on-lisp.19.compiled.test)))
-    (print-errors results)
-    (print-failures results)))
+         (run-tests :package :on-lisp.19.compiled.test
+                    :run-contexts #'with-summary-context)))))
 
-(define-test test-blah
+(define-test test-blah ()
   ;; need to have at least one lisp-unit test to not barf in REPL
   (assert-expands
    (blarf)
