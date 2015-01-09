@@ -1,0 +1,33 @@
+language: common-lisp
+
+env:
+  matrix:
+#    - LISP=abcl
+    - LISP=allegro
+    - LISP=sbcl
+    - LISP=sbcl32
+    - LISP=ccl
+    - LISP=ccl32
+    - LISP=clisp
+    - LISP=clisp32
+#    - LISP=cmucl
+    - LISP=ecl
+
+install:
+  - if [ -x ./install.sh ] && head -2 ./install.sh | grep '^# cl-travis' > /dev/null;
+    then
+      ./install.sh;
+    else
+      curl https://raw.githubusercontent.com/luismbo/cl-travis/master/install.sh | sh;
+    fi
+
+script:
+  - cl -e '(in-package :cl-user)'
+       -e '(ql:quickload (list :on-lisp :on-lisp-test))'
+       -e '(let ((*debugger-hook*
+                  (lambda (c h)
+                    (declare (ignore c h))
+                    (uiop:quit -1))))
+             (lisp-unit2:with-failure-debugging-context
+                 (lambda ()
+                   (on-lisp-test:run-all-tests))))'
