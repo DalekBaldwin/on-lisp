@@ -77,7 +77,7 @@
 (defdelim #\{ #\} (&rest args)
   `(fn (compose ,@args)))
 
-;;; Changed from anonymous lambda to |#[-reader| to support named-readtables
+;;; Changed from anonymous lambda to |#{-reader| to support named-readtables
 (defun |#{-reader| (stream char numarg)
   (declare (ignore char numarg))
   `(fn (compose ,@(read-delimited-list #\} stream t))))
