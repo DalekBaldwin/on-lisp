@@ -16,4 +16,4 @@ The PDF file of the book available from Paul Graham's site isn't so great for re
 
 An online HTML version of the book, minus graphical figures, can be found [here](http://dunsmor.com/lisp/onlisp/onlisp.html).
 
-If you're using CLISP, clone the ahead-of-Quicklisp version of [lisp-unit2](https://github.com/AccelerationNet/lisp-unit2) to load the test code.
+This code has been tested on SBCL, CCL, CLISP, and ECL. If you're using CLISP, make sure you get the latest update (20150113) of lisp-unit2 through Quicklisp in order to load the test code.
