@@ -8,8 +8,8 @@ env:
     - LISP=sbcl32
     - LISP=ccl
     - LISP=ccl32
-    - LISP=clisp # should work with next lisp-unit2 update
-    - LISP=clisp32 # should work with next lisp-unit2 update
+    - LISP=clisp
+    - LISP=clisp32
 #    - LISP=cmucl # /home/travis/.cim/bin/cl: 4: .: Can't open /home/travis/.cim/config/current.3271
     - LISP=ecl
 
@@ -23,12 +23,10 @@ install:
 
 script:
   - cl -e '(in-package :cl-user)'
-       -e '(format t "~&~A~%" (asdf:asdf-version))'
        -e '(ql:quickload (list :on-lisp :on-lisp-test))'
        -e '(let ((*debugger-hook*
                   (lambda (c h)
                     (declare (ignore c h))
                     (uiop:quit -1))))
-             (lisp-unit2:with-failure-debugging-context
-                 (lambda ()
-                   (on-lisp-test:run-all-tests))))'
+             (lisp-unit2:with-failure-debugging
+                 (on-lisp-test:run-all-tests)))'
