@@ -28,5 +28,5 @@ script:
                   (lambda (c h)
                     (declare (ignore c h))
                     (uiop:quit -1))))
-             (lisp-unit2:with-failure-debugging
+             (lisp-unit2:with-failure-debugging ()
                  (on-lisp-test:run-all-tests)))'
