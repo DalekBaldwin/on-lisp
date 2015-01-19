@@ -1,5 +1,10 @@
 language: common-lisp
 
+branches:
+  only:
+    - master
+    - integration
+
 env:
   matrix:
 #    - LISP=abcl # Out of memory PermGen space
