@@ -106,7 +106,20 @@
                  temps)
        ,@(mapcar #'fourth meths))))
 
-;; p. 178 -- is this the notion of "first class macro" Doug Hoyte talks about?
+;; p. 178
+
+;; alternate definition that takes functional arguments
+#+nil
+(defmacro _f (op place &rest args &environment env)
+  (let ((g (gensym)))
+    (multiple-value-bind (vars forms var set access)
+        (get-setf-expansion place env)
+      `(let* ((,g ,op)
+              ,@(mapcar #'list vars forms)
+              (,(car var) (funcall ,g ,access ,@args)))
+         ,set))))
+
+;; is this the notion of "first class macro" Doug Hoyte talks about in Let Over Lambda?
 ;; see also p. 110/111, "Functions are data"
 
 ;; p. 179
