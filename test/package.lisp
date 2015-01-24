@@ -40,7 +40,7 @@
   (:use :cl :stefil :lisp-unit2 :named-readtables
         :on-lisp.24.interpreted)
   (:import-from :on-lisp.18
-                :gensym?)
+                #:gensym?)
   (:export
    #:run-all-tests))
 
@@ -48,13 +48,13 @@
   (:use :cl :stefil :lisp-unit2 :named-readtables
         :on-lisp.24.compiled)
   (:import-from :on-lisp.11
-                :with-gensyms)
+                #:with-gensyms)
   (:import-from :on-lisp.20
-                :=bind
-                :=values)
+                #:=bind
+                #:=values)
   (:import-from :on-lisp.22
-                :*paths*
-                :fail)
+                #:*paths*
+                #:fail)
   (:export
    #:run-all-tests))
 

@@ -130,11 +130,11 @@
 (defpackage :on-lisp.11
   (:use :cl)
   (:import-from :on-lisp.04
-                :mklist
-                :map0-n
-                :map1-n
-                :mappend
-                :group)
+                #:mklist
+                #:map0-n
+                #:map1-n
+                #:mappend
+                #:group)
   (:export
    #:our-let
    #:when-bind
@@ -167,7 +167,7 @@
 (defpackage :on-lisp.12
   (:use :cl)
   (:import-from :on-lisp.11
-                :with-gensyms)
+                #:with-gensyms)
   (:export
    #:allf
    #:nilf
@@ -189,10 +189,10 @@
 (defpackage :on-lisp.13
   (:use :cl)
   (:import-from :on-lisp.04
-                :map0-n
-                :map1-n)
+                #:map0-n
+                #:map1-n)
   (:import-from :on-lisp.11
-                :with-gensyms)
+                #:with-gensyms)
   (:export
    #:most-of
    #:nthmost
@@ -226,9 +226,9 @@
 (defpackage :on-lisp.15
   (:use :cl)
   (:import-from :on-lisp.05
-                :compose
-                :lrec
-                :trec)
+                #:compose
+                #:lrec
+                #:trec)
   (:export
    #:fn
    #:rbuild
@@ -261,11 +261,11 @@
 (defpackage :on-lisp.16
   (:use :cl)
   (:import-from :on-lisp.04
-                :group)
+                #:group)
   (:import-from :on-lisp.12
-                :_f)
+                #:_f)
   (:import-from :on-lisp.14
-                :it)
+                #:it)
   (:export
    #:abbrev
    #:abbrevs
@@ -288,11 +288,11 @@
 (defpackage :on-lisp.17
   (:use :cl)
   (:import-from :named-readtables
-                :defreadtable)
+                #:defreadtable)
   (:import-from :on-lisp.05
-                :compose)
+                #:compose)
   (:import-from :on-lisp.15
-                :fn)
+                #:fn)
   (:export
    #:defdelim
    #:ddfn
@@ -301,14 +301,14 @@
 (defpackage :on-lisp.18
   (:use :cl)
   (:import-from :on-lisp.04
-                :symb)
+                #:symb)
   (:import-from :on-lisp.11
-                :with-gensyms)
+                #:with-gensyms)
   (:import-from :on-lisp.14
-                :aif
-                :it
-                :acond2
-                :aif2)
+                #:aif
+                #:it
+                #:acond2
+                #:aif2)
   (:export
    #:dbind
    #:destruc
@@ -337,13 +337,13 @@
 (defpackage :on-lisp.19.interpreted
   (:use :cl)
   (:import-from :on-lisp.14
-                :it
-                :aif2)
+                #:it
+                #:aif2)
   (:import-from :on-lisp.18
-                :match
-                :binding
-                :vars-in
-                :_)
+                #:match
+                #:binding
+                #:vars-in
+                #:_)
   (:export
    #:make-db
    #:*default-db*
@@ -363,17 +363,17 @@
 (defpackage :on-lisp.19.compiled
   (:use :cl)
   (:import-from :on-lisp.11
-                :with-gensyms)
+                #:with-gensyms)
   (:import-from :on-lisp.14
-                :it
-                :aif2)
+                #:it
+                #:aif2)
   (:import-from :on-lisp.18
-                :match
-                :binding
-                :vars-in
-                :pat-match
-                :simple?
-                :_)
+                #:match
+                #:binding
+                #:vars-in
+                #:pat-match
+                #:simple?
+                #:_)
   (:export
    #:make-db
    #:*default-db*
@@ -416,7 +416,7 @@
 (defpackage :on-lisp.21
   (:use :cl)
   (:import-from :on-lisp.20
-                :=defun)
+                #:=defun)
   (:export
    ;;#:proc
    ;;#:pri
@@ -449,16 +449,16 @@
 (defpackage :on-lisp.23
   (:use :cl)
   (:import-from :on-lisp.11
-                :with-gensyms)
+                #:with-gensyms)
   (:import-from :on-lisp.20
-                :=defun
-                :=defuns
-                :=bind
-                :=values)
+                #:=defun
+                #:=defuns
+                #:=bind
+                #:=values)
   (:import-from :on-lisp.22
-                :*paths*
-                :choose
-                :fail)
+                #:*paths*
+                #:choose
+                #:fail)
   (:export
    #:def-atn-node
    #:def-atn-nodes
@@ -478,28 +478,28 @@
 (defpackage :on-lisp.24.interpreted
   (:use :cl)
   (:import-from :on-lisp.04
-                :symb)
+                #:symb)
   (:import-from :on-lisp.12
-                :conc1f)
+                #:conc1f)
   (:import-from :on-lisp.14
-                :it
-                :aif2)
+                #:it
+                #:aif2)
   (:import-from :on-lisp.18
-                :match
-                :varsym?
-                :binding
-                :vars-in
-                :_
+                #:match
+                #:varsym?
+                #:binding
+                #:vars-in
+                #:_
                 )
   (:import-from :on-lisp.20
-                :=defuns
-                :=bind
-                :=values
+                #:=defuns
+                #:=bind
+                #:=values
                 )
   (:import-from :on-lisp.22
-                :*paths*
-                :choose-bind
-                :fail
+                #:*paths*
+                #:choose-bind
+                #:fail
                 )
   (:export
    #:with-inference
@@ -511,31 +511,31 @@
 (defpackage :on-lisp.24.compiled
   (:use :cl)
   (:import-from :on-lisp.11
-                :with-gensyms)
+                #:with-gensyms)
   (:import-from :on-lisp.12
-                :conc1f)
+                #:conc1f)
   (:import-from :on-lisp.14
-                :it
-                :acond2
-                :aif2)
+                #:it
+                #:acond2
+                #:aif2)
   (:import-from :on-lisp.18
-                :binding
-                :vars-in
-                :simple?
-                :_
-                :gensym?
+                #:binding
+                #:vars-in
+                #:simple?
+                #:_
+                #:gensym?
                 )
   (:import-from :on-lisp.20
-                :=lambda
-                :=defun
-                :=bind
-                :=values
-                :=funcall
+                #:=lambda
+                #:=defun
+                #:=bind
+                #:=values
+                #:=funcall
                 )
   (:import-from :on-lisp.22
-                :*paths*
-                :choose-bind
-                :fail
+                #:*paths*
+                #:choose-bind
+                #:fail
                 )
   (:export
    #:with-inference
@@ -546,35 +546,35 @@
 (defpackage :on-lisp.24.compiled-plus
   (:use :cl)
   (:import-from :on-lisp.11
-                :with-gensyms)
+                #:with-gensyms)
   (:import-from :on-lisp.12
-                :conc1f)
+                #:conc1f)
   (:import-from :on-lisp.14
-                :it
-                :acond2
-                :aif2)
+                #:it
+                #:acond2
+                #:aif2)
   (:import-from :on-lisp.18
-                :varsym?
-                :binding
-                :vars-in
-                :simple?
-                :_
-                :gensym?
+                #:varsym?
+                #:binding
+                #:vars-in
+                #:simple?
+                #:_
+                #:gensym?
                 )
   (:import-from :on-lisp.19.compiled
-                :lisp)
+                #:lisp)
   (:import-from :on-lisp.20
-                :=lambda
-                :=defun
-                :=defuns
-                :=bind
-                :=values
-                :=funcall
+                #:=lambda
+                #:=defun
+                #:=defuns
+                #:=bind
+                #:=values
+                #:=funcall
                 )
   (:import-from :on-lisp.22
-                :*paths*
-                :choose-bind
-                :fail
+                #:*paths*
+                #:choose-bind
+                #:fail
                 )
   (:export
    #:with-inference
@@ -599,7 +599,7 @@
 (defpackage :on-lisp.25.v3
   (:use :cl)
   (:import-from :on-lisp.04
-                :symb)
+                #:symb)
   (:export
    #:defprop
    #:obj
@@ -612,7 +612,7 @@
 (defpackage :on-lisp.25.v4
   (:use :cl)
   (:import-from :on-lisp.04
-                :symb)
+                #:symb)
   (:export
    #:defprop
    #:obj
