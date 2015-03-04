@@ -12,7 +12,7 @@ Among other necessary changes, this version:
 
 It was written to follow along with the book page by page and catalogue dependencies between the chapters, which become quite complex toward the end.
 
-The PDF file of the book available from Paul Graham's site isn't so great for reading on a screen. A version with smaller margins and the missing figures re-added can be found [here](http://www.lurklurk.org/onlisp/onlisp.html). Figure 20.2 is missing a line between 2 and 3.
+The PDF file of the book available from Paul Graham's site isn't so great for reading on a screen. A version with smaller margins and the missing figures re-added can be found [here](http://www.lurklurk.org/onlisp/onlisp.html).
 
 An online HTML version of the book, minus graphical figures, can be found [here](http://dunsmor.com/lisp/onlisp/onlisp.html).
 
