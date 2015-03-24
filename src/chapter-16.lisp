@@ -141,6 +141,7 @@
       (let ((sym (gensym)))
         `(let* ((,sym ,(car args))
                 (it ,sym))
+           (declare (ignorable it))
            ,(anaphex1 (cdr args)
                       (append call (list sym)))))
       call))
