@@ -22,9 +22,19 @@
         ((null (cdr args)) (car args))
         (t `(aif ,(car args) (aand ,@(cdr args))))))
 
+;; version in book
+#+nil
+(defmacro acond (&rest clauses)
+  (if (null clauses)
+      nil
+      (let ((cl1 (car clauses))
+            (sym (gensym)))
+        `(let ((,sym ,(car cl1)))
+           (if ,sym
+               (let ((it ,sym)) ,@(cdr cl1))
+               (acond ,@(cdr clauses)))))))
 
-;; problem noted by pg but no fix given
-;; http://www.paulgraham.com/onlisperrata.html:
+;; Corrected problem in http://www.paulgraham.com/onlisperrata.html:
 ;; p. 191 (acond (3)) returns nil when it should return 3.
 ;; Same problem with acond2, p. 198. Caught by Terrence Ireland.
 (defmacro acond (&rest clauses)
@@ -34,9 +44,11 @@
             (sym (gensym)))
         `(let ((,sym ,(car cl1)))
            (if ,sym
-               (let ((it ,sym))
-                 (declare (ignorable it)) ;; not in original code
-                 ,@(cdr cl1))
+               ,(if (null (cdr cl1))
+                    sym ;; return result of test if no non-test forms in clause
+                    `(let ((it ,sym))
+                       (declare (ignorable it)) ;; not in original code
+                       ,@(cdr cl1)))
                (acond ,@(cdr clauses)))))))
 
 ;; p. 193
@@ -85,8 +97,20 @@
                (progn ,@body)
                (setq ,flag nil))))))
 
-;; problem noted by pg but no fix given
-;; http://www.paulgraham.com/onlisperrata.html:
+;; version in book
+#+nil
+(defmacro acond2 (&rest clauses)
+  (if (null clauses)
+      nil
+      (let ((cl1 (car clauses))
+            (val (gensym))
+            (win (gensym)))
+        `(multiple-value-bind (,val ,win) ,(car cl1)
+           (if (or ,val ,win)
+               (let ((it ,val)) ,@(cdr cl1))
+               (acond2 ,@(cdr clauses)))))))
+
+;; Corrected problem in http://www.paulgraham.com/onlisperrata.html:
 ;; p. 191 (acond (3)) returns nil when it should return 3.
 ;; Same problem with acond2, p. 198. Caught by Terrence Ireland.
 (defmacro acond2 (&rest clauses)
@@ -97,9 +121,11 @@
             (win (gensym)))
         `(multiple-value-bind (,val ,win) ,(car cl1)
            (if (or ,val ,win)
-               (let ((it ,val))
-                 (declare (ignorable it)) ;; not in original code
-                 ,@(cdr cl1))
+               ,(if (null (cdr cl1))
+                    val ;; return result of test if no non-test forms in clause
+                    `(let ((it ,val))
+                       (declare (ignorable it)) ;; not in original code
+                       ,@(cdr cl1)))
                (acond2 ,@(cdr clauses)))))))
 
 ;; p. 199
