@@ -34,7 +34,9 @@
             (sym (gensym)))
         `(let ((,sym ,(car cl1)))
            (if ,sym
-               (let ((it ,sym)) ,@(cdr cl1))
+               (let ((it ,sym))
+                 (declare (ignorable it)) ;; not in original code
+                 ,@(cdr cl1))
                (acond ,@(cdr clauses)))))))
 
 ;; p. 193
@@ -61,6 +63,7 @@
                    (0 nil)
                    (1 (car args))
                    (t `(let ((it ,(car args)))
+                         (declare (ignorable it)) ;; not in original code
                          ,(self (cdr args))))))
                args)))
 
@@ -94,7 +97,9 @@
             (win (gensym)))
         `(multiple-value-bind (,val ,win) ,(car cl1)
            (if (or ,val ,win)
-               (let ((it ,val)) ,@(cdr cl1))
+               (let ((it ,val))
+                 (declare (ignorable it)) ;; not in original code
+                 ,@(cdr cl1))
                (acond2 ,@(cdr clauses)))))))
 
 ;; p. 199

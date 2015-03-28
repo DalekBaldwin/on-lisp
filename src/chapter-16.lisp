@@ -53,6 +53,7 @@
       (let ((sym (gensym)))
         `(let* ((,sym ,(car args))
                 (it ,sym))
+           (declare (ignorable it)) ;; not in original code
            ,(a+expand (cdr args)
                       (append syms (list sym)))))
       `(+ ,@syms)))
@@ -65,6 +66,7 @@
       (let ((sym (gensym)))
         `(let* ((,sym ,(car args))
                 (it ,sym))
+           (declare (ignorable it)) ;; not in original code
            ,(alist-expand (cdr args)
                           (append syms (list sym)))))
       `(list ,@syms)))
