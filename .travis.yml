@@ -5,6 +5,7 @@ branches:
     - master
     - integration
 
+sudo: required
 env:
   matrix:
 #    - LISP=abcl # Out of memory PermGen space
