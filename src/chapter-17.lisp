@@ -65,7 +65,7 @@
 (let ((rpar (get-macro-character #\))))
   (defun ddfn# (left rigth fn)
     (set-macro-character right rpar)
-    (set-dispatch-macro-character left
+    (set-dispatch-macro-character #\# left
       (lambda (stream char)
         (declare (ignore char))
         (apply fn
