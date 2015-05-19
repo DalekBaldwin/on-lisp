@@ -56,15 +56,25 @@
       (push i accum))))
 
 ;; p. 228
+(defmacro defdelim# (left right params &body body)
+  `(ddfn# ,left ,right (lambda ,params ,@body)))
+
 (defmacro defdelim (left right parms &body body)
   `(ddfn ,left ,right (lambda ,parms ,@body)))
 
 (let ((rpar (get-macro-character #\))))
+  (defun ddfn# (left rigth fn)
+    (set-macro-character right rpar)
+    (set-dispatch-macro-character left
+      (lambda (stream char)
+        (declare (ignore char))
+        (apply fn
+               (read-delimited-list right stream t)))))
   (defun ddfn (left right fn)
     (set-macro-character right rpar)
-    (set-dispatch-macro-character #\# left
+    (set-macro-character left
       (lambda (stream char1 char2)
-        (declare (ignore char1 char2))
+        (declare (ignore char1))
         (apply fn
                (read-delimited-list right stream t))))))
 
