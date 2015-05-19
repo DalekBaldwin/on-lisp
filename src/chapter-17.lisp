@@ -78,7 +78,7 @@
         (apply fn
                (read-delimited-list right stream t))))))
 
-;;#+nil
+#+nil
 (defdelim# #\[ #\] (x y)
   (list 'quote (mapa-b #'identity (ceiling x) (floor y))))
 
