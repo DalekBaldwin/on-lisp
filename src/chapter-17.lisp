@@ -82,12 +82,9 @@
 (defdelim# #\[ #\] (x y)
   (list 'quote (mapa-b #'identity (ceiling x) (floor y))))
 
-(defdelim #\[ #\] (x y)
-  (list 'quote (mapa-b #'identity (ceiling x) (floor y))))
-
 ;; p. 229
 #+nil
-(defdelim #\{ #\} (&rest args)
+(defdelim# #\{ #\} (&rest args)
   `(fn (compose ,@args)))
 
 ;;; Changed from anonymous lambda to |#{-reader| to support named-readtables
