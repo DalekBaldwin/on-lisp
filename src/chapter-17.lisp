@@ -56,25 +56,35 @@
       (push i accum))))
 
 ;; p. 228
+(defmacro defdelim# (left right parms &body body)
+  `(ddfn# ,left ,right (lambda ,parms ,@body)))
+
 (defmacro defdelim (left right parms &body body)
   `(ddfn ,left ,right (lambda ,parms ,@body)))
 
 (let ((rpar (get-macro-character #\))))
-  (defun ddfn (left right fn)
+  (defun ddfn# (left right fn)
     (set-macro-character right rpar)
     (set-dispatch-macro-character #\# left
       (lambda (stream char1 char2)
         (declare (ignore char1 char2))
         (apply fn
+               (read-delimited-list right stream t)))))
+  (defun ddfn (left right fn)
+    (set-macro-character right rpar)
+    (set-macro-character left
+      (lambda (stream char)
+        (declare (ignore char))
+        (apply fn
                (read-delimited-list right stream t))))))
 
 #+nil
-(defdelim #\[ #\] (x y)
+(defdelim# #\[ #\] (x y)
   (list 'quote (mapa-b #'identity (ceiling x) (floor y))))
 
 ;; p. 229
 #+nil
-(defdelim #\{ #\} (&rest args)
+(defdelim# #\{ #\} (&rest args)
   `(fn (compose ,@args)))
 
 ;;; Changed from anonymous lambda to |#{-reader| to support named-readtables
