@@ -63,7 +63,7 @@
   `(ddfn ,left ,right (lambda ,parms ,@body)))
 
 (let ((rpar (get-macro-character #\))))
-  (defun ddfn# (left rigth fn)
+  (defun ddfn# (left right fn)
     (set-macro-character right rpar)
     (set-dispatch-macro-character #\# left
       (lambda (stream char)
@@ -74,7 +74,7 @@
     (set-macro-character right rpar)
     (set-macro-character left
       (lambda (stream char1 char2)
-        (declare (ignore char1))
+        (declare (ignore char1 char2))
         (apply fn
                (read-delimited-list right stream t))))))
 
