@@ -14,6 +14,27 @@ It was written to follow along with the book page by page and catalogue dependen
 
 The PDF file of the book available from Paul Graham's site isn't so great for reading on a screen. A version with smaller margins and the missing figures re-added can be found [here](http://www.lurklurk.org/onlisp/onlisp.html).
 
-An online HTML version of the book, minus graphical figures, can be found [here](http://dunsmor.com/lisp/onlisp/onlisp.html).
+An online HTML version of the book, minus graphical figures, can be found [here](http://lisp.esthlos.com/onlisp/on_lisp.html).
 
 This code has been tested on SBCL, CCL, CLISP, and ECL. The simplest way to get it up and running is to install [Quicklisp](https://www.quicklisp.org) and clone this repository into your `quicklisp/local-projects` directory.
+
+Beginner's GNU/Linux quickguide, for those just starting with Lisp:
+
+Have one of the tested Lisps installed on your system ( SBCL, CCL, CLISP or ECL ). Rlwrap is also suggested for ease of console use, but not required [available here]( https://github.com/hanslub42/rlwrap )
+Install quicklisp and make sure it loads every time by following instructions in the installer or web-page  `( ql:add-to-init-file )`
+By default, quicklisp installs to your home directory. For example, in terminal execute: 
+
+`cd ~/quicklisp/local-projects/`
+
+`git clone https://github.com/DalekBaldwin/on-lisp/`
+
+`sbcl `
+
+`(ql:quickload "on-lisp")`
+
+
+To test that Your Lisp flavor is compatible with the On Lisp code, run the included on-lisp-test. It will download required libraries if not installed on the system, that might take some time. Execute the following in your REPL to run the test
+
+`(ql:quickload "on-lisp-test")`
+
+
