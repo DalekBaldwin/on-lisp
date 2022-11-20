@@ -151,11 +151,12 @@
 
 ;; p. 156
 
-;; problem reported to pg but not checked -- test this!!!!!!!!!!
+;; The problem reported to pg listed at
 ;; http://www.paulgraham.com/onlisperrata.html:
-;; p. 156. In do-tuples/o the expression (1- (length parms)) should be
+;; "p. 156. In do-tuples/o the expression (1- (length parms)) should be
 ;; (- (length source) (length parms)).
-;; Reported by Roland. (at netquant.com.br)
+;; Reported by Roland. (at netquant.com.br)"
+;; is wrong, the original text below has the correct code.
 (defmacro do-tuples/o (parms source &body body)
   (if parms
       (let ((src (gensym)))
@@ -163,10 +164,7 @@
             (mapc (lambda ,parms ,@body)
                   ,@(map0-n (lambda (n)
                               `(nthcdr ,n ,src))
-                            ;;(1- (length parms)) ;; error in text
-                            (- (length source) (length parms)) ;; corrected
-                            
-                            ))))))
+                            (1- (length parms))))))))
 
 (defmacro do-tuples/c (parms source &body body)
   (if parms
